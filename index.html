@@ -2,48 +2,68 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ma Collection BD</title>
 
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#3e4a89" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <header>
+  <header class="app-header">
     <h1>📚 Ma Collection BD</h1>
-    <button id="addButton">Ajouter une BD ➕</button>
+    <div class="header-actions">
+      <button id="themeToggle" class="btn secondary" title="Basculer clair/sombre">🌙</button>
+      <button id="addButton" class="btn primary">Ajouter une BD ➕</button>
+    </div>
   </header>
 
-  <section id="bdList"></section>
+  <!-- Import ISBN -->
+  <section id="importBar" class="import-bar">
+    <input id="isbnInput" inputmode="numeric" pattern="[0-9Xx\\- ]*" placeholder="ISBN (10 ou 13 chiffres)">
+    <button id="importIsbnBtn" class="btn">Importer via ISBN</button>
+    <small id="importHint" class="hint">Essaie d’abord Google Books, puis Open Library</small>
+  </section>
+
+  <!-- Liste -->
+  <section id="bdList" class="bd-list"></section>
 
   <!-- Modal d’ajout -->
-  <div id="modal" class="hidden">
+  <div id="modal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true">
     <div class="modal-content">
       <h2>Ajouter une BD</h2>
-      <input id="titleInput" placeholder="Titre">
-      <input id="authorInput" placeholder="Auteur(s)">
-      <input id="artistInput" placeholder="Dessinateur(s)">
-      <input id="editorInput" placeholder="Éditeur">
-      <input type="date" id="dateInput">
-      
-      <label>Statut :</label>
-      <select id="statusInput">
-        <option value="a_lire">À lire</option>
-        <option value="lu">Lu</option>
-        <option value="wishlist">Wishlist</option>
-        <option value="a_vendre">À vendre</option>
-      </select>
+      <div class="form-grid">
+        <input id="titleInput" placeholder="Titre">
+        <input id="authorInput" placeholder="Auteur(s)">
+        <input id="artistInput" placeholder="Dessinateur(s)">
+        <input id="editorInput" placeholder="Éditeur">
+        <input type="date" id="dateInput">
 
-      <label>Couverture :</label>
-      <input type="file" accept="image/*" id="coverInput">
+        <label for="statusInput">Statut :</label>
+        <select id="statusInput">
+          <option value="a_lire">À lire</option>
+          <option value="lu">Lu</option>
+          <option value="wishlist">Wishlist</option>
+          <option value="a_vendre">À vendre</option>
+        </select>
 
-      <button id="saveButton">Enregistrer</button>
-      <button id="cancelButton">Annuler</button>
+        <label for="coverInput">Couverture :</label>
+        <input type="file" accept="image/*" id="coverInput">
+      </div>
+
+      <div class="modal-actions">
+        <button id="saveButton" class="btn primary">Enregistrer</button>
+        <button id="cancelButton" class="btn">Annuler</button>
+      </div>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <noscript>Active JavaScript pour utiliser l’application.</noscript>
 
+  <!-- App -->
+  <script src="app.js" defer></script>
 </body>
 </html>

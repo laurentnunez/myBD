@@ -357,31 +357,35 @@ async function importFromOpenLibraryByISBN(isbn) {
 
 if (importBtn) {
   importBtn.addEventListener("click", async () => {
-    const raw = (isbnInput?.value || "").trim();
-    const isbn = raw.replace(/[-\s]/g, "");
-    if (!isbn) {
-      alert("Saisis un ISBN (10 ou 13 chiffres).");
-      return;
-    }
-    if (importHint) importHint.textContent = "Import en cours…";
+  const raw = (isbnInput?.value || "").trim();
+  const isbn = raw.replace(/[-\s]/g, "");
+  if (!isbn) {
+    alert("Saisis un ISBN (10 ou 13 chiffres).");
+    return;
+  }
+  if (importHint) importHint.textContent = "Import en cours…";
 
+  try {
     try {
-      try {
-        await importFromGoogleBooksByISBN(isbn); // 1) Google Books
-      } catch {
-        await importFromOpenLibraryByISBN(isbn); // 2) Fallback Open Library
-      }
-      if (importHint) {
-        importHint.textContent = importedCoverDataURL
-          ? "Métadonnées importées. Couverture trouvée ✅"
-          : "Métadonnées importées (pas de couverture disponible)";
-      }
-      // Ouvrir la modale pour compléter puis enregistrer
-      openModal();
-    } catch (e) {
-      if (importHint) importHint.textContent = "Aucun résultat trouvé. Vérifie l'ISBN.";
+      await importFromGoogleBooksByISBN(isbn); 
+    } catch {
+      await importFromOpenLibraryByISBN(isbn);
     }
-  });
+
+    if (importHint) {
+      importHint.textContent = importedCoverDataURL
+        ? "Métadonnées importées. Couverture trouvée ✅"
+        : "Métadonnées importées (pas de couverture)";
+    }
+
+    // ❌ On NE met plus openModal() ici
+    // 👉 L’utilisateur pourra cliquer “Ajouter une BD” ensuite
+
+  } catch (e) {
+    if (importHint) importHint.textContent = "Aucun résultat trouvé. Vérifie l'ISBN.";
+  }
+});
+
 }
 
 /* =========================================================

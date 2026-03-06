@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <!-- En-tête -->
   <header class="app-header">
     <h1>📚 Ma Collection BD</h1>
     <div class="header-actions">
@@ -23,13 +24,19 @@
 
   <!-- Import ISBN -->
   <section id="importBar" class="import-bar">
-    <input id="isbnInput" inputmode="numeric" pattern="[0-9Xx\\- ]*" placeholder="ISBN (10 ou 13 chiffres)">
+    <input
+      id="isbnInput"
+      inputmode="numeric"
+      pattern="[0-9Xx\- ]*"
+      placeholder="ISBN (10 ou 13 chiffres)"
+      aria-label="Saisir un ISBN (10 ou 13 chiffres)"
+    />
     <button id="importIsbnBtn" class="btn">Importer via ISBN</button>
     <small id="importHint" class="hint">Essaie d’abord Google Books, puis Open Library</small>
   </section>
 
-  <!-- Tri par statut -->
-  <section id="filterBar" class="filter-bar">
+  <!-- Filtres par statut -->
+  <section id="filterBar" class="filter-bar" aria-label="Filtrer par statut">
     <button class="filter-btn" data-filter="all">Tout</button>
     <button class="filter-btn" data-filter="a_lire">À lire</button>
     <button class="filter-btn" data-filter="lu">Lu</button>
@@ -37,21 +44,23 @@
     <button class="filter-btn" data-filter="a_vendre">À vendre</button>
   </section>
 
-  <!-- Liste -->
-  <section id="bdList" class="bd-list"></section>
+  <!-- Liste des BD -->
+  <section id="bdList" class="bd-list" aria-live="polite" aria-label="Liste des BD"></section>
 
-  <!-- Modal d’ajout -->
-  <div id="modal" class="modal hidden">
+  <!-- Modale d’ajout / modification (cachée par défaut) -->
+  <div id="modal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-content">
-      <h2>Ajouter/Modifier une BD</h2>
+      <h2 id="modalTitle">Ajouter / Modifier une BD</h2>
+
       <div class="form-grid">
-        <input id="titleInput" placeholder="Titre">
-        <input id="authorInput" placeholder="Auteur(s)">
-        <input id="artistInput" placeholder="Dessinateur(s)">
-        <input id="editorInput" placeholder="Éditeur">
-        <input type="date" id="dateInput">
+        <input id="titleInput" placeholder="Titre" aria-label="Titre" />
+        <input id="authorInput" placeholder="Auteur(s)" aria-label="Auteur(s)" />
+        <input id="artistInput" placeholder="Dessinateur(s)" aria-label="Dessinateur(s)" />
+        <input id="editorInput" placeholder="Éditeur" aria-label="Éditeur" />
+        <input type="date" id="dateInput" aria-label="Date de parution" />
+
         <label for="statusInput">Statut :</label>
-        <select id="statusInput">
+        <select id="statusInput" aria-label="Statut">
           <option value="a_lire">À lire</option>
           <option value="lu">Lu</option>
           <option value="wishlist">Wishlist</option>
@@ -59,7 +68,7 @@
         </select>
 
         <label for="coverInput">Couverture :</label>
-        <input type="file" accept="image/*" id="coverInput">
+        <input type="file" accept="image/*" id="coverInput" aria-label="Importer une image de couverture" />
       </div>
 
       <div class="modal-actions">

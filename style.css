@@ -1,5 +1,7 @@
-/* ===== Thème via variables CSS ===== */
-:root{
+/* =========================================================
+   VARIABLES GLOBALES (THEME CLAIR & SOMBRE)
+   ========================================================= */
+:root {
   --bg: #f5f6fb;
   --fg: #111827;
   --card: #ffffff;
@@ -9,90 +11,136 @@
   --accent: #00b894;
   --border: #e5e7eb;
   --shadow: 0 2px 10px rgba(0,0,0,.06);
-  --cover-w: 150px;   /* largeur souhaitée */
-  --cover-h: 225px;   /* hauteur souhaitée */
 
+  /* Taille couverture (modifiable facilement) */
+  --cover-w: 120px;
+  --cover-h: 180px;
+
+  --gap: 12px;
 }
 
-body.dark{
-  --bg: #000000;
+body.dark {
+  --bg: #0f1523;
   --fg: #e5e7eb;
-  --card: #43d3b62a;
+  --card: #121a2b;
   --muted: #94a3b8;
-  --primary: #43d3b62d;
-  --primary-contrast: #0b2018;
+  --primary: #8aa0ff;
+  --primary-contrast: #0b1020;
   --accent: #43d3b5;
-  --border: #43d3b5;
+  --border: #1f2a44;
   --shadow: 0 2px 14px rgba(0,0,0,.3);
 }
 
-/* ===== Base ===== */
-*{ box-sizing: border-box; }
-html,body{ height:100%; }
-body{
-  margin:0;
+/* =========================================================
+   BASE
+   ========================================================= */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg);
   color: var(--fg);
-  font: 16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
 }
 
-/* ===== Header ===== */
-.app-header{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:12px 14px;
+/* Cache standard */
+.hidden {
+  display: none !important;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background: var(--primary);
   color: var(--primary-contrast);
+  padding: 12px 14px;
 }
-.app-header h1{ margin:0; font-size:1.15rem; color: var(--fg);}
-.header-actions{ display:flex; gap:8px; align-items:center; }
 
-/* ===== Boutons ===== */
-.btn{
-  border:1px solid var(--border);
+.app-header h1 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.header-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* =========================================================
+   BOUTONS
+   ========================================================= */
+.btn {
+  padding: 8px 12px;
   background: var(--card);
   color: var(--fg);
-  padding:8px 12px;
-  border-radius:8px;
-  cursor:pointer;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
   box-shadow: var(--shadow);
+  transition: 0.15s ease-in-out;
 }
-.btn.primary{
+
+.btn.primary {
   background: var(--accent);
-  color:#fff;
+  color: white;
   border-color: transparent;
 }
-.btn.secondary{
+
+.btn.secondary {
   background: var(--card);
 }
-.btn:hover{ filter: brightness(1.02); }
 
-/* ===== Import Bar ===== */
-.import-bar{
-  display:flex; gap:8px; align-items:center;
-  padding:12px;
+.btn:hover {
+  filter: brightness(1.05);
 }
-#importBar input{
+
+/* =========================================================
+   BARRE IMPORT ISBN
+   ========================================================= */
+.import-bar {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  flex-wrap: wrap;
+}
+
+#importBar input {
   flex: 1 1 auto;
-  padding:10px; border-radius:8px; border:1px solid var(--border);
-  background: var(--card); color: var(--fg);
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--fg);
 }
-.hint{ color: var(--muted); }
 
+.hint {
+  color: var(--muted);
+}
 
-/* ===== Tri par statut ===== */
+/* =========================================================
+   FILTRES
+   ========================================================= */
 .filter-bar {
   display: flex;
   gap: 8px;
-  padding: 10px;
+  padding: 10px 12px;
   flex-wrap: wrap;
 }
 
 .filter-btn {
   padding: 6px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
   background: var(--card);
+  border: 1px solid var(--border);
   color: var(--fg);
+  border-radius: 8px;
   cursor: pointer;
 }
 
@@ -102,17 +150,23 @@ body{
   border-color: transparent;
 }
 
-/* ===== Liste ===== */
-.bd-list{ padding:8px; display:grid; gap:10px; }
+/* =========================================================
+   LISTE DE BD
+   ========================================================= */
+.bd-list {
+  padding: 8px;
+  display: grid;
+  gap: var(--gap);
+}
 
 .bd-card {
   display: grid;
   grid-template-columns: var(--cover-w) 1fr;
-  gap: 12px;
+  gap: var(--gap);
   padding: 12px;
   border: 1px solid var(--border);
-  border-radius: 12px;
   background: var(--card);
+  border-radius: 12px;
   box-shadow: var(--shadow);
   align-items: start;
 }
@@ -125,28 +179,80 @@ body{
   background: #ddd;
 }
 
-.bd-actions{ margin-top:8px; display:flex; gap:8px; flex-wrap:wrap; }
+.bd-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
 
-/* ===== Modal ===== */
-.hidden{ display:none; }
-.modal{
-  position:fixed; inset:0; background:rgba(0,0,0,.55);
-  display:flex; align-items:center; justify-content:center;
-  padding:14px;
+/* =========================================================
+   MODALE
+   ========================================================= */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.60);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px;
+  z-index: 999;
 }
-.modal-content{
-  width:min(680px, 100%); background: var(--card); color: var(--fg);
-  border-radius:12px; padding:18px; box-shadow: var(--shadow);
-}
-.form-grid{
-  display:flex; flex-wrap: wrap;grid-template-columns: 1fr 1fr; gap:10px; margin-top:6px;
-}
-.form-grid input, .form-grid select{
-  padding:10px; border-radius:8px; border:1px solid var(--border);
-  background: var(--bg); color: var(--fg);
-}
-.modal-actions{ margin-top:12px; display:flex; gap:10px; justify-content:flex-end; }
 
-/* ===== Petits détails ===== */
-p{ margin:.25rem 0; }
-h3{ margin:.25rem 0 .35rem; }
+.modal-content {
+  width: min(90%, 650px);
+  background: var(--card);
+  color: var(--fg);
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* =========================================================
+   FORMULAIRE
+   ========================================================= */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.form-grid input,
+.form-grid select {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 600px) {
+  .bd-card {
+    grid-template-columns: 1fr;
+  }
+
+  .bd-cover {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3/4;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}

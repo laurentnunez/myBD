@@ -61,7 +61,9 @@ function loadBD() {
     const list = document.getElementById("bdList");
     list.innerHTML = "";
 
-    req.result.forEach((bd) => {
+    req.result
+      .filter(bd => currentFilter === "all" || bd.status === currentFilter)
+      .forEach((bd) => {
       const card = document.createElement("div");
       card.className = "bd-card";
 
@@ -80,7 +82,8 @@ function loadBD() {
           <p><strong>Date :</strong> ${escapeHTML(bd.date || "")}</p>
           <p><strong>Statut :</strong> ${formatStatus(bd.status)}</p>
           <div class="bd-actions">
-            <button class="btn" onclick="deleteBD(${bd.id})">🗑️ Supprimer</button>
+          <button class="btn" onclick="editBD(${bd.id})">✏️ Modifier</button>  
+          <button class="btn" onclick="deleteBD(${bd.id})">🗑️ Supprimer</button>
           </div>
         </div>
       `;
@@ -111,6 +114,37 @@ function deleteBD(id) {
   tx.oncomplete = loadBD;
 }
 window.deleteBD = deleteBD; // pour onclick inline
+
+function editBD(id) {
+  const tx = db.transaction("bd", "readonly");
+  const store = tx.objectStore("bd");
+  const req = store.get(id);
+
+  req.onsuccess = () => {
+    const bd = req.result;
+
+    // Remplir la modale
+    document.getElementById("titleInput").value  = bd.title;
+    document.getElementById("authorInput").value = bd.author;
+    document.getElementById("artistInput").value = bd.artist;
+    document.getElementById("editorInput").value = bd.editor;
+    document.getElementById("dateInput").value   = bd.date;
+    document.getElementById("statusInput").value = bd.status;
+
+    // Important : pour la couverture
+    importedCoverDataURL = bd.cover || "";
+
+    // On stocke l’ID dans la modale (data attribute)
+    document.getElementById("modal").dataset.editId = id;
+
+    // Ouvrir la modale
+    document.getElementById("modal").classList.remove("hidden");
+  };
+}
+
+
+
+
 
 // =====================================
 // Modal : ouverture / fermeture
@@ -228,8 +262,8 @@ document.getElementById("importIsbnBtn")?.addEventListener("click", async () => 
 // =====================================
 document.getElementById("saveButton").onclick = async () => {
   const file = document.getElementById("coverInput").files[0];
-  let cover = "";
 
+  let cover = "";
   if (file) {
     cover = await toBase64(file);
   } else if (importedCoverDataURL) {
@@ -246,16 +280,30 @@ document.getElementById("saveButton").onclick = async () => {
     cover
   };
 
-  const tx = db.transaction("bd", "readwrite");
-  tx.objectStore("bd").add(bd);
+  const editId = document.getElementById("modal").dataset.editId;
 
-  tx.oncomplete = () => {
-  try { loadBD(); } catch(e){}
-  try { resetForm(); } catch(e){}
-  importedCoverDataURL = "";
-  const modal = document.getElementById("modal");
-  if (modal) modal.classList.add("hidden");
-	};
+  if (editId) {
+    // MODE MODIFICATION
+    bd.id = Number(editId);
+    const tx = db.transaction("bd", "readwrite");
+    tx.objectStore("bd").put(bd);
+    tx.oncomplete = () => {
+      delete document.getElementById("modal").dataset.editId;
+      loadBD();
+      resetForm();
+      document.getElementById("modal").classList.add("hidden");
+    };
+
+  } else {
+    // MODE CRÉATION
+    const tx = db.transaction("bd", "readwrite");
+    tx.objectStore("bd").add(bd);
+    tx.oncomplete = () => {
+      loadBD();
+      resetForm();
+      document.getElementById("modal").classList.add("hidden");
+    };
+  }
 };
 
 function resetForm() {
@@ -276,3 +324,17 @@ function toBase64(file) {
     reader.readAsDataURL(file);
   });
 }
+
+let currentFilter = "all";
+
+document.querySelectorAll(".filter-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    // visuel
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+
+    // logique
+    currentFilter = btn.dataset.filter;
+    loadBD();
+  });
+});

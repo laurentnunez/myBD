@@ -78,6 +78,30 @@ body{
 }
 .hint{ color: var(--muted); }
 
+
+/* ===== Tri par statut ===== */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  background: var(--accent);
+  color: white;
+  border-color: transparent;
+}
+
 /* ===== Liste ===== */
 .bd-list{ padding:8px; display:grid; gap:10px; }
 

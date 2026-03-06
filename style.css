@@ -1,7 +1,7 @@
 /* =========================================================
-   VARIABLES GLOBALES (THEME CLAIR & SOMBRE)
+   VARIABLES (Thème clair/sombre + tailles cover)
    ========================================================= */
-:root {
+:root{
   --bg: #f5f6fb;
   --fg: #111827;
   --card: #ffffff;
@@ -12,14 +12,12 @@
   --border: #e5e7eb;
   --shadow: 0 2px 10px rgba(0,0,0,.06);
 
-  /* Taille couverture (modifiable facilement) */
-  --cover-w: 120px;
-  --cover-h: 180px;
-
+  /* Grille & cover */
+  --cover-ratio: 3/4;
   --gap: 12px;
 }
 
-body.dark {
+body.dark{
   --bg: #0f1523;
   --fg: #e5e7eb;
   --card: #121a2b;
@@ -34,11 +32,8 @@ body.dark {
 /* =========================================================
    BASE
    ========================================================= */
-* {
-  box-sizing: border-box;
-}
-
-html, body {
+*{ box-sizing: border-box; }
+html, body{
   margin: 0;
   height: 100%;
   font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
@@ -46,213 +41,150 @@ html, body {
   color: var(--fg);
 }
 
-/* Cache standard */
-.hidden {
-  display: none !important;
-}
+.hidden{ display:none !important; }
 
 /* =========================================================
    HEADER
    ========================================================= */
-.app-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.app-header{
+  display:flex; align-items:center; justify-content:space-between;
   background: var(--primary);
   color: var(--primary-contrast);
   padding: 12px 14px;
 }
-
-.app-header h1 {
-  margin: 0;
-  font-size: 1.2rem;
-}
-
-.header-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
+.app-header h1{ margin:0; font-size:1.2rem; }
+.header-actions{ display:flex; gap:8px; align-items:center; }
 
 /* =========================================================
    BOUTONS
    ========================================================= */
-.btn {
-  padding: 8px 12px;
+.btn{
+  padding:8px 12px;
   background: var(--card);
   color: var(--fg);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  cursor: pointer;
+  border:1px solid var(--border);
+  border-radius:8px;
+  cursor:pointer;
   box-shadow: var(--shadow);
-  transition: 0.15s ease-in-out;
+  transition: .15s ease;
 }
-
-.btn.primary {
-  background: var(--accent);
-  color: white;
-  border-color: transparent;
-}
-
-.btn.secondary {
-  background: var(--card);
-}
-
-.btn:hover {
-  filter: brightness(1.05);
-}
+.btn.primary{ background: var(--accent); color: #fff; border-color: transparent; }
+.btn.secondary{ background: var(--card); }
+.btn:hover{ filter: brightness(1.05); }
 
 /* =========================================================
-   BARRE IMPORT ISBN
+   IMPORT ISBN
    ========================================================= */
-.import-bar {
-  display: flex;
-  gap: 8px;
-  padding: 12px;
-  flex-wrap: wrap;
+.import-bar{
+  display:flex; gap:8px; padding:12px; flex-wrap:wrap;
 }
-
-#importBar input {
-  flex: 1 1 auto;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--card);
-  color: var(--fg);
+#importBar input{
+  flex:1 1 auto;
+  padding:10px; border-radius:8px; border:1px solid var(--border);
+  background: var(--card); color: var(--fg);
 }
-
-.hint {
-  color: var(--muted);
-}
+.hint{ color: var(--muted); }
 
 /* =========================================================
    FILTRES
    ========================================================= */
-.filter-bar {
-  display: flex;
-  gap: 8px;
-  padding: 10px 12px;
-  flex-wrap: wrap;
+.filter-bar{
+  display:flex; gap:8px; padding:10px 12px; flex-wrap:wrap;
 }
-
-.filter-btn {
-  padding: 6px 12px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  color: var(--fg);
-  border-radius: 8px;
-  cursor: pointer;
+.filter-btn{
+  padding:6px 12px; border-radius:8px; cursor:pointer;
+  background: var(--card); color: var(--fg); border:1px solid var(--border);
 }
-
-.filter-btn.active {
-  background: var(--accent);
-  color: white;
-  border-color: transparent;
-}
+.filter-btn.active{ background: var(--accent); color:#fff; border-color: transparent; }
 
 /* =========================================================
-   LISTE DE BD
+   LISTE — MODE GRILLE (3 colonnes mobiles)
    ========================================================= */
-.bd-list {
-  padding: 8px;
-  display: grid;
-  gap: var(--gap);
+.bd-list{
+  padding:12px;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colonnes en mobile (demandé) */
+  gap:14px;
 }
 
-.bd-card {
-  display: grid;
-  grid-template-columns: var(--cover-w) 1fr;
-  gap: var(--gap);
-  padding: 12px;
-  border: 1px solid var(--border);
+/* Carte compacte : cover + titre + actions */
+.bd-card-grid{
   background: var(--card);
-  border-radius: 12px;
+  border:1px solid var(--border);
+  border-radius:10px;
   box-shadow: var(--shadow);
-  align-items: start;
+  padding:10px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
 }
 
-.bd-cover {
-  width: var(--cover-w);
-  height: var(--cover-h);
+/* Cover */
+.bd-cover{
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--cover-ratio);
   object-fit: cover;
   border-radius: 8px;
   background: #ddd;
 }
+.bd-cover.placeholder{
+  display:block;
+}
 
-.bd-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
+/* Titre */
+.bd-card-title{
+  font-weight: 600;
+  font-size: .95rem;
+  line-height: 1.2;
+  min-height: 2.6em; /* stabilise la hauteur selon longueur du titre */
+}
+
+/* Actions */
+.bd-card-actions{
+  display:flex;
+  justify-content:center;
+  gap:8px;
 }
 
 /* =========================================================
    MODALE
    ========================================================= */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.60);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 14px;
-  z-index: 999;
+.modal{
+  position:fixed; inset:0; z-index:999;
+  background: rgba(0,0,0,.6);
+  display:flex; align-items:center; justify-content:center;
+  padding:14px;
 }
-
-.modal-content {
-  width: min(90%, 650px);
-  background: var(--card);
-  color: var(--fg);
-  border-radius: 12px;
-  padding: 18px;
-  box-shadow: var(--shadow);
+.modal-content{
+  width:min(90%, 650px);
+  background: var(--card); color: var(--fg);
+  border-radius:12px; padding:18px; box-shadow: var(--shadow);
 }
+.modal-content h2{ margin-top:0; }
+.modal-actions{ display:flex; justify-content:flex-end; gap:10px; margin-top:12px; }
 
-.modal-content h2 {
-  margin-top: 0;
+/* Formulaire */
+.form-grid{
+  display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;
 }
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-/* =========================================================
-   FORMULAIRE
-   ========================================================= */
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.form-grid input,
-.form-grid select {
-  padding: 10px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg);
-  color: var(--fg);
+.form-grid input, .form-grid select{
+  padding:10px; border:1px solid var(--border); border-radius:8px;
+  background: var(--bg); color: var(--fg);
 }
 
 /* =========================================================
    RESPONSIVE
    ========================================================= */
-@media (max-width: 600px) {
-  .bd-card {
-    grid-template-columns: 1fr;
-  }
-
-  .bd-cover {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 3/4;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
+/* Plus d’espace = davantage de colonnes */
+@media (min-width: 900px){
+  .bd-list{ grid-template-columns: repeat(6, 1fr); }
+}
+@media (max-width: 420px){
+  /* Si c'est trop serré, passe à 2 colonnes très petites */
+  .bd-list{ grid-template-columns: repeat(3, 1fr); } /* tu peux mettre 2 ici si besoin */
+}
+@media (max-width: 600px){
+  .form-grid{ grid-template-columns: 1fr; }
 }

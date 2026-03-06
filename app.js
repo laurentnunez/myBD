@@ -149,6 +149,8 @@ function loadBD() {
             ? `<img src="${escapeHTML(bd.cover)}" alt="Couverture de ${escapeHTML(bd.title || "")}" loading="lazy">`
             : `<div class="bd-cover" aria-label="Pas de couverture"></div>`}
           <div class="bd-card-title">${escapeHTML(bd.title || "")}</div>
+          <div class="author">${escapeHTML(bd.author || "")}</div>
+          <div class="author">${escapeHTML(bd.artist || "")}</div>
           <div class="bd-card-actions">
             <button class="btn" title="Modifier" onclick="editBD(${bd.id})">✏️</button>
             <button class="btn" title="Supprimer" onclick="deleteBD(${bd.id})">🗑️</button>
@@ -164,6 +166,7 @@ function loadBD() {
           <div class="info">
             <div class="bd-card-title">${escapeHTML(bd.title || "")}</div>
             <div class="author">${escapeHTML(bd.author || "")}</div>
+            <div class="author">${escapeHTML(bd.artist || "")}</div>
           </div>
           <div class="bd-card-actions">
             <button class="btn" title="Modifier" onclick="editBD(${bd.id})">✏️</button>

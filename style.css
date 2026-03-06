@@ -226,7 +226,7 @@ html, body {
 /* Titre */
 .bd-card-title {
   font-weight: 600;
-  font-size: .95rem;
+  font-size: .8rem;
   min-height: 2.4em;
 }
 
@@ -268,7 +268,12 @@ html, body {
 /* Auteur plus discret */
 .author {
   color: var(--muted);
-  font-size: .85rem;
+  font-size: .8rem;
+}
+
+.artist {
+  color: var(--muted);
+  font-size: .8rem;
 }
 
 /* =========================================================

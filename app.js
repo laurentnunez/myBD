@@ -66,8 +66,9 @@ function loadBD() {
       card.className = "bd-card";
 
       const coverHTML = bd.cover
-        ? `<img class="bd-cover" src="${bd.cover}" alt="Couverture">`
-        : `<div class="bd-cover" aria-label="Pas de couverture"></div>`;
+      ? `<img class="bd-cover" src="${bd.cover}" alt="Couverture BD">`
+      : `<div class="bd-cover" aria-label="Pas de couverture"></div>`;
+
 
       card.innerHTML = `
         ${coverHTML}

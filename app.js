@@ -73,7 +73,11 @@ function byId(id) { return document.getElementById(id); }
 
 function escapeHTML(s) {
   return (s || "").toString().replace(/[&<>"']/g, (m) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#039;"
   }[m]));
 }
 
@@ -94,6 +98,19 @@ async function urlToDataURL(url) {
     r.onloadend = () => resolve(r.result);
     r.readAsDataURL(blob);
   });
+}
+
+/**
+ * Essaie de convertir une URL image en DataURL (base64) pour l'offline.
+ * Si CORS empêche la lecture, on garde l'URL HTTPS d'origine.
+ */
+async function makeCoverFromUrl(url) {
+  const httpsUrl = url.replace(/^http:\/\//, "https://");
+  try {
+    return await urlToDataURL(httpsUrl); // succès → data:image/...
+  } catch {
+    return httpsUrl;                      // fallback → URL directe
+  }
 }
 
 function normalizeDate(input) {
@@ -138,13 +155,12 @@ function loadBD() {
     listEl.classList.toggle("list-mode", listMode === "list");
 
     items.forEach((bd) => {
-      let html = "";
       const wrap = document.createElement("div");
 
       if (listMode === "grid") {
-        // ===== Mode Grille : cover + titre + actions
+        // ===== Mode Grille : cover + titre + actions (compact)
         wrap.className = "bd-card-grid";
-        html = `
+        wrap.innerHTML = `
           ${bd.cover
             ? `<img src="${escapeHTML(bd.cover)}" alt="Couverture de ${escapeHTML(bd.title || "")}" loading="lazy">`
             : `<div class="bd-cover" aria-label="Pas de couverture"></div>`}
@@ -159,7 +175,7 @@ function loadBD() {
       } else {
         // ===== Mode Liste (L3) : cover + (titre + auteur) + actions
         wrap.className = "bd-card-list";
-        html = `
+        wrap.innerHTML = `
           ${bd.cover
             ? `<img src="${escapeHTML(bd.cover)}" alt="Couverture de ${escapeHTML(bd.title || "")}" loading="lazy">`
             : `<div class="bd-cover" aria-label="Pas de couverture"></div>`}
@@ -175,7 +191,6 @@ function loadBD() {
         `;
       }
 
-      wrap.innerHTML = html;
       listEl.appendChild(wrap);
     });
   };
@@ -321,7 +336,7 @@ const importBtn = byId("importIsbnBtnModal");
 const importHint = byId("importHintModal");
 
 async function importFromGoogleBooks(isbn) {
-  const apiKey = "COLLE_TA_CLE_API_ICI"; // restreins par HTTP referrer à ton GitHub Pages
+  const apiKey = "AIzaSyA5B3tNy65krib-Y7DWpR1U01X1cOxMMiI"; // restreins par HTTP referrer à ton GitHub Pages
   const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(isbn)}&maxResults=1&key=${apiKey}`;
 
   const r = await fetch(url);
@@ -338,7 +353,9 @@ async function importFromGoogleBooks(isbn) {
   importedCoverDataURL = "";
   const img = info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail;
   if (img) {
-    try { importedCoverDataURL = await urlToDataURL(img.replace("http://","https://")); } catch {}
+    try {
+      importedCoverDataURL = await makeCoverFromUrl(img);
+    } catch { importedCoverDataURL = ""; }
   }
 }
 
@@ -361,8 +378,7 @@ async function importFromOpenLibrary(isbn) {
   // Couverture
   try {
     const coverUrl = `https://covers.openlibrary.org/b/isbn/${encodeURIComponent(isbn)}-L.jpg?default=false`;
-    const test = await fetch(coverUrl);
-    if (test.ok) importedCoverDataURL = await urlToDataURL(coverUrl);
+    importedCoverDataURL = await makeCoverFromUrl(coverUrl);
   } catch {}
 }
 

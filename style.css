@@ -112,11 +112,12 @@ html, body {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 
 .filter-bar .add-floating{
-  margin-left: auto;          /* clé pour “coller” à droite */
+  position: sticky;
   min-width: 40px;
   aspect-ratio: 1/1;
   border-radius: 999px;       /* joli bouton rond */
@@ -125,6 +126,7 @@ html, body {
   display: grid;
   place-items: center;
 }
+
 
 .filter-btn {
   padding: 6px 12px;
@@ -148,6 +150,7 @@ html, body {
   align-items: center;
   gap: 10px;
   font-weight: 500;
+  font-size: small;
 }
 
 /* Switch iOS */
@@ -191,12 +194,12 @@ html, body {
    ========================================================= */
 .bd-list {
   padding: 12px;
-  display: flex;
+  display: grid;
   gap: 14px;
 }
 
 /* 3 colonnes */
-/*.grid-mode {
+.grid-mode {
   grid-template-columns: repeat(3, 1fr);
 }
 

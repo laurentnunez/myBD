@@ -1,23 +1,19 @@
 /* =========================================================
-   VARIABLES (THEME CLAIR / SOMBRE)
+   THEME SOMBRE — VARIABLES
    ========================================================= */
 :root {
-  /* Couleurs principales du thème sombre */
   --bg: #0e1014;
   --fg: #e5e7eb;
   --card: #1b1e25;
   --muted: #94a3b8;
   --accent: #4de8ce;
   --border: #393f4d;
-
   --shadow: 0 2px 14px rgba(0,0,0,.3);
 
-  /* Couverture */
   --cover-ratio: 3/4;
   --cover-w: 100%;
   --gap: 12px;
 
-  /* Switch grille/liste (100 % sombre) */
   --switch-bg: #334155;
   --switch-active: #8aa0ff;
 }
@@ -39,31 +35,17 @@ html, body {
    HEADER
    ========================================================= */
 .app-header {
-  background: var(--primary);
-  color: var(--primary-contrast);
+  background: var(--accent);
+  color: #000;
   padding: 12px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.app-header h1 {
-  margin: 0;
-  font-size: 1.2rem;
-}
-.header-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-}
-
-.thehead {
-  display: flex;
-  flex-direction: row;
-}
-
-.mybookslogo {
-  width: 30px;
-}
+.app-header h1 { margin: 0; font-size: 1.2rem; }
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.thehead { display: flex; flex-direction: row; gap: 10px; align-items: center; }
+.mybookslogo { width: 30px; }
 
 /* =========================================================
    BOUTONS
@@ -80,15 +62,11 @@ html, body {
 }
 .btn.primary {
   background: var(--accent);
-  color: #fff;
+  color: #000;
   border-color: transparent;
 }
-.btn.secondary {
-  background: var(--card);
-}
-.btn:hover {
-  filter: brightness(1.07);
-}
+.btn.secondary { background: var(--card); }
+.btn:hover { filter: brightness(1.07); }
 
 /* =========================================================
    ZONE FILTRES + TOGGLE
@@ -99,30 +77,22 @@ html, body {
   flex-direction: column;
   gap: 10px;
 }
-
-/* -------------------
-   FILTRES STATUT
----------------------*/
 .filter-bar {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   justify-content: center;
 }
-
-
 .filter-bar .add-floating{
   position: sticky;
   min-width: 40px;
   aspect-ratio: 1/1;
-  border-radius: 999px;       /* joli bouton rond */
+  border-radius: 999px;
   font-size: 1.2rem;
   line-height: 1;
   display: grid;
   place-items: center;
 }
-
-
 .filter-btn {
   padding: 6px 12px;
   border-radius: 8px;
@@ -133,13 +103,13 @@ html, body {
 }
 .filter-btn.active {
   background: var(--accent);
-  color: #fff;
+  color: #000;
   border-color: transparent;
 }
 
-/* -------------------
-   TOGGLE LISTE / GRILLE — switch S1
----------------------*/
+/* =========================================================
+   TOGGLE LISTE / GRILLE
+   ========================================================= */
 .view-toggle {
   display: flex;
   align-items: center;
@@ -147,17 +117,8 @@ html, body {
   font-weight: 500;
   font-size: small;
 }
-
-/* Switch iOS */
-.switch {
-  position: relative;
-  width: 42px;
-  height: 24px;
-  display: inline-block;
-}
-.switch input {
-  display: none;
-}
+.switch { position: relative; width: 42px; height: 24px; display: inline-block; }
+.switch input { display: none; }
 .slider {
   position: absolute;
   cursor: pointer;
@@ -169,36 +130,20 @@ html, body {
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  top: 3px;
-  background: #fff;
-  border-radius: 50%;
+  height: 18px; width: 18px;
+  left: 3px; top: 3px;
+  background: #fff; border-radius: 50%;
   transition: .3s;
 }
-.switch input:checked + .slider {
-  background: var(--switch-active);
-}
-.switch input:checked + .slider:before {
-  transform: translateX(18px);
-}
+.switch input:checked + .slider { background: var(--switch-active); }
+.switch input:checked + .slider:before { transform: translateX(18px); }
 
 /* =========================================================
-   LISTE DES BD — MODE GRILLE (par défaut)
+   LISTE DES BD — MODE GRILLE
    ========================================================= */
-.bd-list {
-  padding: 12px;
-  display: grid;
-  gap: 14px;
-}
+.bd-list { padding: 12px; display: grid; gap: 14px; }
+.grid-mode { grid-template-columns: repeat(3, 1fr); }
 
-/* 3 colonnes */
-.grid-mode {
-  grid-template-columns: repeat(3, 1fr);
-}
-
-/* MODE GRILLE : carte */
 .bd-card-grid {
   background: var(--card);
   border: 1px solid var(--border);
@@ -211,68 +156,37 @@ html, body {
   gap: 6px;
 }
 
-/* Cover (Data URL) */
+/* Cover */
 .bd-card-grid img,
 .bd-card-list img {
   width: 100%;
   aspect-ratio: var(--cover-ratio);
-  object-fit:cover;
+  object-fit: cover;
   border-radius: 8px;
-  background: #ddd;
+  background: #222;
 }
 
 /* Titre */
-.bd-card-title {
-  font-weight: 600;
-  font-size: .8rem;
-  min-height: 2.4em;
-}
-
-/* Boutons actions */
-.bd-card-actions {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-}
+.bd-card-title { font-weight: 600; font-size: .85rem; min-height: 2.4em; }
+.bd-card-actions { display: flex; justify-content: center; gap: 8px; }
 
 /* =========================================================
-   MODE LISTE (L3 = cover + titre + auteur)
+   MODE LISTE
    ========================================================= */
-.list-mode {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
+.list-mode { display: flex; flex-direction: column; gap: 14px; }
 .bd-card-list {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px;
   box-shadow: var(--shadow);
-
   display: grid;
-  grid-template-columns: 90px 1fr auto; /* cover / texte / boutons */
+  grid-template-columns: 90px 1fr auto;
   gap: 12px;
   align-items: center;
 }
-
-.bd-card-list .info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* Auteur plus discret */
-.author {
-  color: var(--muted);
-  font-size: .8rem;
-}
-
-.artist {
-  color: var(--muted);
-  font-size: .8rem;
-}
+.bd-card-list .info { display: flex; flex-direction: column; gap: 4px; }
+.author, .artist { color: var(--muted); font-size: .8rem; }
 
 /* =========================================================
    MODALE
@@ -287,7 +201,6 @@ html, body {
   padding: 16px;
   z-index: 999;
 }
-
 .modal-content {
   width: min(90%, 650px);
   background: var(--card);
@@ -296,73 +209,34 @@ html, body {
   padding: 18px;
   box-shadow: var(--shadow);
 }
-
-.modal-content h2 {
-  margin-top: 0;
-}
+.modal-content h2 { margin: 0 0 8px 0; }
 
 /* Formulaire modale */
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-.form-grid input,
-.form-grid select {
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.form-grid input, .form-grid select {
   padding: 10px;
   background: var(--bg);
   color: var(--fg);
   border-radius: 8px;
   border: 1px solid var(--border);
 }
+.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
 
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-/* Zone scan code-barres */
-.scan-zone {
-  margin-top: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.scan-container {
-  width: 100%;
-  max-height: 220px;
-  overflow: hidden;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-}
-
-.scan-video {
-  width: 100%;
-  height: auto;
-  background: #000;
-}
-
-
-
+/* =========================================================
+   SCAN
+   ========================================================= */
+.scan-zone { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+.scan-container { width: 100%; max-height: 220px; overflow: hidden; border-radius: 10px; border: 1px solid var(--border); }
+.scan-video { width: 100%; height: auto; background: #000; }
+.hint { color: var(--muted); }
 
 /* =========================================================
    RESPONSIVE
    ========================================================= */
 @media (max-width: 450px) {
-  .grid-mode {
-    grid-template-columns: repeat(2, 1fr); /* si tu veux absolument 3, replace repeat(3,1fr) */
-  }
+  .grid-mode { grid-template-columns: repeat(2, 1fr); }
 }
-
 @media (max-width: 600px) {
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .bd-card-list {
-    grid-template-columns: 70px 1fr auto;
-  }
+  .form-grid { grid-template-columns: 1fr; }
+  .bd-card-list { grid-template-columns: 70px 1fr auto; }
 }

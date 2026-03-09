@@ -12,48 +12,35 @@
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
   <!-- En-tête -->
   <header class="app-header">
     <div class="thehead">
-    <img class="mybookslogo" src="/mybookslogo.png" alt="Logo MyBooks"> <h1>MyBooks</h1>
+      <img class="mybookslogo" src="/mybookslogo.png" alt="Logo MyBooks"> <h1>MyBooks</h1>
     </div>
-       
-  <div class="header-actions">
-      
+    <div class="header-actions">
       <div class="view-toggle">
-      <!-- Toggle Liste / Grille (style iOS S1) -->
-      <span>Grille</span>
-      <label class="switch">
-        <input type="checkbox" id="viewModeToggle">
-        <span class="slider"></span>
-      </label>
-      <span>Liste</span>
+        <!-- Toggle Liste / Grille -->
+        <span>Grille</span>
+        <label class="switch">
+          <input type="checkbox" id="viewModeToggle">
+          <span class="slider"></span>
+        </label>
+        <span>Liste</span>
+      </div>
     </div>
-    </div>
-
-    
   </header>
 
-  <!-- Zone Filtres + Toggle Grille/Liste -->
+  <!-- Zone Filtres -->
   <section id="filtersArea" class="filters-area">
-
-    <!-- Filtres statut -->
     <div id="filterBar" class="filter-bar">
-      
       <button class="filter-btn" data-filter="collec">La Collec'</button>
       <button class="filter-btn" data-filter="a_lire">À lire</button>
       <button class="filter-btn" data-filter="lu">Lu</button>
       <button class="filter-btn" data-filter="a_vendre">À vendre</button>
       <button class="filter-btn" data-filter="wishlist">Wishlist</button>
-
       <button id="addButton" class="btn primary add-floating">+</button>
     </div>
-
-    
-
   </section>
 
   <!-- Liste des BD -->
@@ -62,23 +49,19 @@
   <!-- Modale d’ajout / modification -->
   <div id="modal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-content">
-
       <h2 id="modalTitle">Ajouter / Modifier une BD</h2>
 
-              <!-- Scan code-barres -->
-        <div class="scan-zone">
-          <label>Ou scanner le code-barres :</label>
-          <div class="scan-container">
-              <video id="barcodeVideo" class="scan-video"></video>
-          </div>
-          <button id="startScanBarcode" class="btn secondary">
-              📷 Scanner le code-barres
-          </button>
-          <small id="scanStatus" class="hint"></small>
+      <!-- Scan code-barres -->
+      <div class="scan-zone">
+        <label>Ou scanner le code-barres :</label>
+        <div class="scan-container">
+          <video id="barcodeVideo" class="scan-video"></video>
         </div>
-
-        <!-- ZXing-JS -->
-        <script type="module" src="https://unpkg.com/@zxing/library@latest/esm/index.js"></script>
+        <button id="startScanBarcode" class="btn secondary">
+          📷 Scanner le code-barres
+        </button>
+        <small id="scanStatus" class="hint"></small>
+      </div>
 
       <div class="form-grid">
         <input id="titleInput" placeholder="Titre" aria-label="Titre" />
@@ -86,7 +69,6 @@
         <input id="artistInput" placeholder="Dessinateur(s)" aria-label="Dessinateur(s)" />
         <input id="editorInput" placeholder="Éditeur" aria-label="Éditeur" />
         <input type="date" id="dateInput" aria-label="Date de parution" />
-
         <label for="statusInput">Statut :</label>
         <select id="statusInput" aria-label="Statut">
           <option value="a_lire">À lire</option>
@@ -94,7 +76,6 @@
           <option value="wishlist">Wishlist</option>
           <option value="a_vendre">À vendre</option>
         </select>
-
         <label for="coverInput">Couverture :</label>
         <input type="file" accept="image/*" id="coverInput" aria-label="Importer une image de couverture" />
       </div>
@@ -103,14 +84,10 @@
         <button id="saveButton" class="btn primary">Enregistrer</button>
         <button id="cancelButton" class="btn">Annuler</button>
       </div>
-
     </div>
   </div>
 
-  <noscript>Active JavaScript pour utiliser l’application.</noscript>
-
   <!-- App -->
-  <script src="app.js" defer></script>
-
+  <script type="module" src="app.js"></script>
 </body>
 </html>

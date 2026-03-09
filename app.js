@@ -32,11 +32,11 @@ let currentFilter = "collec";
 let importedCoverDataURL = "";
 let listMode = "grid";
 
-const modalEl       = document.getElementById("modal");
-const detailModalEl = document.getElementById("detailModal");
-const listEl        = document.getElementById("bdList");
-const viewModeToggle= document.getElementById("viewModeToggle");
-const addButton     = document.getElementById("addButton");
+const modalEl        = document.getElementById("modal");
+const detailModalEl  = document.getElementById("detailModal");
+const listEl         = document.getElementById("bdList");
+const viewModeToggle = document.getElementById("viewModeToggle");
+const addButton      = document.getElementById("addButton");
 
 /* =========================================================
    Utilitaires
@@ -45,7 +45,11 @@ function byId(id) { return document.getElementById(id); }
 
 function escapeHTML(s) {
   return (s ?? "").replace(/[&<>\"']/g, (m) => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
   }[m]));
 }
 
@@ -99,39 +103,38 @@ function loadBD() {
           <div class="bd-card-title">${escapeHTML(bd.title)}</div>
           <div class="author">${escapeHTML(bd.author)}</div>
           <div class="author">${escapeHTML(bd.artist)}</div>
-
           <div class="bd-card-actions">
             <button class="btn" onclick="event.stopPropagation(); editBD(${bd.id})">✏️</button>
             <button class="btn" onclick="event.stopPropagation(); deleteBD(${bd.id})">🗑️</button>
           </div>
         `;
       } else {
-  // ===== Mode Liste : cover + (titre + auteur + éditeur/année) + actions
-  wrap.className = "bd-card-list";
+        wrap.className = "bd-card-list";
 
-  // Année depuis la date (ex: "2021-05-12" -> "2021")
-  const year = (bd.date ?? "").slice(0, 4);
-  const editorYear =
-    bd.editor && year ? `${escapeHTML(bd.editor)} • ${escapeHTML(year)}`
-    : bd.editor        ? `${escapeHTML(bd.editor)}`
-    : year             ? `${escapeHTML(year)}`
-                       : "";
+        const year = (bd.date ?? "").slice(0, 4);
+        const editorYear =
+          bd.editor && year ? `${escapeHTML(bd.editor)} • ${escapeHTML(year)}`
+          : bd.editor        ? `${escapeHTML(bd.editor)}`
+          : year             ? `${escapeHTML(year)}`
+                             : "";
 
-  wrap.innerHTML = `
-    ${coverHtml}
-    <div class="info">
-      <div class="bd-card-title">${escapeHTML(bd.title)}</div>
-      <div class="author">${escapeHTML(bd.author ?? "")}</div>
-      ${editorYear ? `<div class="meta">${editorYear}</div>` : ``}
-    </div>
-    <div class="bd-card-actions">
-      <button class="btn" onclick="event.stopPropagation(); editBD(${bd.id})">✏️</button>
-      <button class="btn" onclick="event.stopPropagation(); deleteBD(${bd.id})">🗑️</button>
-    </div>
-  `;
-}
+        wrap.innerHTML = `
+          ${coverHtml}
+          <div class="info">
+            <div class="bd-card-title">${escapeHTML(bd.title)}</div>
+            <div class="author">${escapeHTML(bd.author ?? "")}</div>
+            ${editorYear ? `<div class="meta">${editorYear}</div>` : ``}
+          </div>
+          <div class="bd-card-actions">
+            <button class="btn" onclick="event.stopPropagation(); editBD(${bd.id})">✏️</button>
+            <button class="btn" onclick="event.stopPropagation(); deleteBD(${bd.id})">🗑️</button>
+          </div>
+        `;
+      }
 
+      // Clic → fiche détail
       wrap.onclick = () => openDetail(bd);
+
       listEl.appendChild(wrap);
     });
   };
@@ -160,17 +163,18 @@ window.deleteBD = deleteBD;
 
 function editBD(id) {
   const tx = db.transaction("bd", "readonly");
+
   tx.objectStore("bd").get(id).onsuccess = (e) => {
     const bd = e.target.result;
     if (!bd) return;
 
-    byId("titleInput").value    = bd.title    ?? "";
-    byId("authorInput").value   = bd.author   ?? "";
-    byId("artistInput").value   = bd.artist   ?? "";
-    byId("editorInput").value   = bd.editor   ?? "";
-    byId("dateInput").value     = bd.date     ?? "";
-    byId("statusInput").value   = bd.status   ?? "a_lire";
-    byId("synopsisInput").value = bd.synopsis ?? "";
+    byId("titleInput").value    = bd.title   ?? "";
+    byId("authorInput").value   = bd.author  ?? "";
+    byId("artistInput").value   = bd.artist  ?? "";
+    byId("editorInput").value   = bd.editor  ?? "";
+    byId("dateInput").value     = bd.date    ?? "";
+    byId("statusInput").value   = bd.status  ?? "a_lire";
+    byId("synopsisInput").value = bd.synopsis?? "";
 
     importedCoverDataURL = bd.cover ?? "";
 
@@ -263,8 +267,8 @@ document.querySelectorAll(".filter-btn").forEach((btn) => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".filter-btn")
       .forEach((b) => b.classList.remove("active"));
-    btn.classList.add("active");
 
+    btn.classList.add("active");
     currentFilter = btn.dataset.filter;
     loadBD();
   });
@@ -280,9 +284,8 @@ if (collectBtn) {
 loadBD();
 
 /* =========================================================
-   FICHE DÉTAILLÉE
+   FICHE DÉTAILLÉE — CORRIGÉE
 ========================================================= */
-
 function openDetail(bd) {
   byId("detailTitle").textContent    = bd.title    ?? "";
   byId("detailAuthor").textContent   = bd.author   ?? "";
@@ -292,17 +295,17 @@ function openDetail(bd) {
   byId("detailSynopsis").textContent = bd.synopsis ?? "";
   byId("detailCover").src            = bd.cover    ?? "";
 
-  // Affiche la modale
   detailModalEl.classList.remove("hidden");
-
-  // On masque le FAB (bouton +)
   addButton.classList.add("hidden");
 }
 
-// ---------- Fermeture avec le bouton “Fermer” ----------
+// Empêche la ré-ouverture immédiate (clic dans la modale ≠ clic sur BOS)
+document.querySelector(".modal-content.detail").addEventListener("click", (e) => {
+  e.stopPropagation();
+});
+
+// Bouton FERMER (fonctionnel maintenant)
 byId("detailClose").onclick = () => {
   detailModalEl.classList.add("hidden");
-
-  // On réaffiche le FAB
   addButton.classList.remove("hidden");
 };

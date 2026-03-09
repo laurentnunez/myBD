@@ -35,8 +35,7 @@ html, body {
    HEADER
    ========================================================= */
 .app-header {
-  background: var(--accent);
-  color: #000;
+  color: var(--fg);
   padding: 12px 14px;
   display: flex;
   align-items: center;
@@ -187,6 +186,7 @@ html, body {
 }
 .bd-card-list .info { display: flex; flex-direction: column; gap: 4px; }
 .author, .artist { color: var(--muted); font-size: .8rem; }
+.editor { color: var(--fg); font-size: .7rem; font-style: italic; }
 
 /* =========================================================
    MODALE

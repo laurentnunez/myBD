@@ -116,6 +116,7 @@ function loadBD() {
             <div class="bd-card-title">${escapeHTML(bd.title)}</div>
             <div class="author">${escapeHTML(bd.author)}</div>
             <div class="author">${escapeHTML(bd.artist)}</div>
+            <div class="editor">${escapeHTML(bd.editor)} | ${escapeHTML(bd.date)}</div>
           </div>
           <div class="bd-card-actions">
             <button class="btn" onclick="event.stopPropagation(); editBD(${bd.id})">✏️</button>

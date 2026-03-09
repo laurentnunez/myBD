@@ -2,37 +2,23 @@
    VARIABLES (THEME CLAIR / SOMBRE)
    ========================================================= */
 :root {
-  :root {
-  --bg: #0b1412;
-  --fg: #dfeee8;
-  --card: #13201d;
-  --muted: #88a39b;
-  --primary: #2dd4bf;   /* turquoise pastel */
-  --primary-contrast: #03221d;
-  --accent: #4de8ce;
-  --border: #1d2e2a;
-}
-
-  /* Cover */
-  --cover-ratio: 3/4;
-  --cover-w: 100%;
-  --gap: 12px;
-
-  /* Switch Liste/Grille */
-  --switch-bg: #cfd3e0;
-  --switch-bg-dark: #334155;
-  --switch-active: #3e4a89;
-}
-
-body.dark {
+  /* Couleurs principales du thème sombre */
   --bg: #0e1014;
   --fg: #e5e7eb;
   --card: #1b1e25;
   --muted: #94a3b8;
   --accent: #4de8ce;
   --border: #393f4d;
+
   --shadow: 0 2px 14px rgba(0,0,0,.3);
-  --switch-bg: var(--switch-bg-dark);
+
+  /* Couverture */
+  --cover-ratio: 3/4;
+  --cover-w: 100%;
+  --gap: 12px;
+
+  /* Switch grille/liste (100 % sombre) */
+  --switch-bg: #334155;
   --switch-active: #8aa0ff;
 }
 
@@ -68,6 +54,15 @@ html, body {
   display: flex;
   gap: 8px;
   align-items: center;
+}
+
+.thehead {
+  display: flex;
+  flex-direction: row;
+}
+
+.mybookslogo {
+  width: 30px;
 }
 
 /* =========================================================
@@ -306,29 +301,6 @@ html, body {
   margin-top: 0;
 }
 
-/* Import ISBN dans la modale */
-.isbn-zone {
-  margin-bottom: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.isbn-row {
-  display: flex;
-  gap: 8px;
-}
-#isbnInputModal {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--fg);
-}
-.hint {
-  color: var(--muted);
-}
-
 /* Formulaire modale */
 .form-grid {
   display: grid;
@@ -350,6 +322,31 @@ html, body {
   gap: 10px;
   margin-top: 12px;
 }
+
+/* Zone scan code-barres */
+.scan-zone {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.scan-container {
+  width: 100%;
+  max-height: 220px;
+  overflow: hidden;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.scan-video {
+  width: 100%;
+  height: auto;
+  background: #000;
+}
+
+
+
 
 /* =========================================================
    RESPONSIVE

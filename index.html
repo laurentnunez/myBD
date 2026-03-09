@@ -17,8 +17,10 @@
 
   <!-- En-tête -->
   <header class="app-header">
-    <h1>📚 MyBooks</h1> 
-    
+    <div class="thehead">
+    <img class="mybookslogo" src="/mybookslogo.png" alt="Logo MyBooks"> <h1>MyBooks</h1>
+    </div>
+       
   <div class="header-actions">
       
       <div class="view-toggle">
@@ -63,21 +65,20 @@
 
       <h2 id="modalTitle">Ajouter / Modifier une BD</h2>
 
-      <!-- Import ISBN déplacé ici -->
-      <div class="isbn-zone">
-        <label for="isbnInputModal">Importer via ISBN :</label>
-        <div class="isbn-row">
-          <input
-            id="isbnInputModal"
-            inputmode="numeric"
-            pattern="[0-9Xx\- ]*"
-            placeholder="ISBN (10 ou 13 chiffres)"
-            aria-label="Saisir un ISBN"
-          />
-          <button id="importIsbnBtnModal" class="btn">Importer</button>
+              <!-- Scan code-barres -->
+        <div class="scan-zone">
+          <label>Ou scanner le code-barres :</label>
+          <div class="scan-container">
+              <video id="barcodeVideo" class="scan-video"></video>
+          </div>
+          <button id="startScanBarcode" class="btn secondary">
+              📷 Scanner le code-barres
+          </button>
+          <small id="scanStatus" class="hint"></small>
         </div>
-        <small id="importHintModal" class="hint">Google Books → Open Library</small>
-      </div>
+
+        <!-- ZXing-JS -->
+        <script type="module" src="https://unpkg.com/@zxing/library@latest/esm/index.js"></script>
 
       <div class="form-grid">
         <input id="titleInput" placeholder="Titre" aria-label="Titre" />
@@ -105,8 +106,6 @@
 
     </div>
   </div>
-
-  <button id="themeToggle" class="btn secondary" title="Basculer clair/sombre">🌙</button>
 
   <noscript>Active JavaScript pour utiliser l’application.</noscript>
 

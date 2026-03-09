@@ -8,31 +8,6 @@ if ("serviceWorker" in navigator) {
 }
 
 /* =========================================================
-   THEME SOMBRE (avec persistance)
-   ========================================================= */
-const THEME_KEY = "bd-theme";
-const themeToggleBtn = document.getElementById("themeToggle");
-
-function applyTheme(mode) {
-  document.body.classList.toggle("dark", mode === "dark");
-  themeToggleBtn.textContent = mode === "dark" ? "☀️" : "🌙";
-}
-
-function systemPrefersDark() {
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
-
-let currentTheme =
-  localStorage.getItem(THEME_KEY) || (systemPrefersDark() ? "dark" : "light");
-applyTheme(currentTheme);
-
-themeToggleBtn.addEventListener("click", () => {
-  currentTheme = currentTheme === "dark" ? "light" : "dark";
-  localStorage.setItem(THEME_KEY, currentTheme);
-  applyTheme(currentTheme);
-});
-
-/* =========================================================
    IndexedDB
    ========================================================= */
 let db;
@@ -292,7 +267,7 @@ byId("saveButton").onclick = async () => {
    Reset formulaire
    ========================================================= */
 function resetForm() {
-  ["titleInput","authorInput","artistInput","editorInput","dateInput","isbnInputModal"].forEach((id) => {
+  ["titleInput","authorInput","artistInput","editorInput","dateInput"].forEach((id) => {
     const el = byId(id);
     if (el) el.value = "";
   });
@@ -329,85 +304,85 @@ if (filterButtons && filterButtons.length) {
 }
 
 /* =========================================================
-   Import ISBN (dans la modale)
+   Scan code-barres (EAN-13) avec ZXing-JS
    ========================================================= */
-const isbnInput = byId("isbnInputModal");
-const importBtn = byId("importIsbnBtnModal");
-const importHint = byId("importHintModal");
 
-async function importFromGoogleBooks(isbn) {
-  const apiKey = "AIzaSyA5B3tNy65krib-Y7DWpR1U01X1cOxMMiI"; // restreins par HTTP referrer à ton GitHub Pages
-  const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${encodeURIComponent(isbn)}&maxResults=1&key=${apiKey}`;
+import { BrowserMultiFormatReader } from "https://unpkg.com/@zxing/library@latest/esm/index.js";
 
-  const r = await fetch(url);
-  if (!r.ok) throw new Error("Google Books KO");
-  const data = await r.json();
-  if (!data.items || !data.items.length) throw new Error("Aucun résultat Google Books");
+const barcodeVideo = document.getElementById("barcodeVideo");
+const scanBtn = document.getElementById("startScanBarcode");
+const scanStatus = document.getElementById("scanStatus");
 
-  const info = data.items[0].volumeInfo || {};
-  byId("titleInput").value  = info.title || "";
-  byId("authorInput").value = (info.authors || []).join(", ");
-  byId("editorInput").value = info.publisher || "";
-  byId("dateInput").value   = normalizeDate(info.publishedDate || "");
+let codeReader = null;
+let scanning = false;
 
-  importedCoverDataURL = "";
-  const img = info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail;
-  if (img) {
-    try {
-      importedCoverDataURL = await makeCoverFromUrl(img);
-    } catch { importedCoverDataURL = ""; }
-  }
-}
+async function startBarcodeScan() {
+    if (scanning) return;
+    scanning = true;
 
-async function importFromOpenLibrary(isbn) {
-  importedCoverDataURL = "";
-
-  // Métadonnées minimales
-  try {
-    const res = await fetch(`https://openlibrary.org/isbn/${encodeURIComponent(isbn)}.json`);
-    if (res.ok) {
-      const meta = await res.json();
-      if (!byId("titleInput").value)  byId("titleInput").value  = meta.title || "";
-      if (!byId("editorInput").value && Array.isArray(meta.publishers) && meta.publishers.length) {
-        byId("editorInput").value = meta.publishers[0];
-      }
-      if (!byId("dateInput").value)   byId("dateInput").value   = normalizeDate(meta.publish_date || "");
-    }
-  } catch {}
-
-  // Couverture
-  try {
-    const coverUrl = `https://covers.openlibrary.org/b/isbn/${encodeURIComponent(isbn)}-L.jpg?default=false`;
-    importedCoverDataURL = await makeCoverFromUrl(coverUrl);
-  } catch {}
-}
-
-if (importBtn) {
-  importBtn.addEventListener("click", async () => {
-    const raw  = (isbnInput?.value || "").trim();
-    const isbn = raw.replace(/[-\s]/g, "");
-    if (!isbn) {
-      alert("Saisis un ISBN (10 ou 13 chiffres).");
-      return;
-    }
-
-    importHint.textContent = "Import en cours…";
+    scanStatus.textContent = "Ouverture de la caméra…";
 
     try {
-      try {
-        await importFromGoogleBooks(isbn);
-      } catch {
-        await importFromOpenLibrary(isbn);
-      }
+        codeReader = new BrowserMultiFormatReader();
 
-      importHint.textContent = importedCoverDataURL
-        ? "Données récupérées + couverture trouvée ✔️"
-        : "Données récupérées (pas de couverture)";
-    } catch {
-      importHint.textContent = "Aucun résultat trouvé.";
+        const devices = await codeReader.listVideoInputDevices();
+        if (!devices.length) {
+            scanStatus.textContent = "❌ Aucune caméra détectée.";
+            scanning = false;
+            return;
+        }
+
+        const deviceId = devices[0].deviceId;
+
+        scanStatus.textContent = "📷 Scanne en cours…";
+
+        codeReader.decodeOnceFromVideoDevice(deviceId, barcodeVideo)
+            .then(result => {
+                const isbn = result.text.trim();
+                scanStatus.textContent = "EAN-13 détecté : " + isbn;
+
+                // Remplir le champ ISBN
+                const isbnInput = document.getElementById("isbnInputModal");
+                isbnInput.value = isbn;
+
+                // Déclencher l'import existant
+                const importBtn = document.getElementById("importIsbnBtnModal");
+                importBtn.click();
+
+                stopBarcodeScan();
+            })
+            .catch(err => {
+                console.error(err);
+                scanStatus.textContent = "❌ Impossible de lire le code-barres.";
+                stopBarcodeScan();
+            });
+
+    } catch (e) {
+        console.error(e);
+        scanStatus.textContent = "❌ Erreur lors de l'accès à la caméra.";
+        scanning = false;
     }
-  });
 }
+
+function stopBarcodeScan() {
+    if (codeReader) {
+        codeReader.reset();
+    }
+    scanning = false;
+}
+
+scanBtn?.addEventListener("click", startBarcodeScan);
+
+// Stopper la caméra quand on ferme la modale
+modalEl.addEventListener("transitionend", () => {
+    if (modalEl.classList.contains("hidden")) {
+        stopBarcodeScan();
+    }
+});
+
+document.body.classList.add("dark");
+
+
 
 /* =========================================================
    FIN

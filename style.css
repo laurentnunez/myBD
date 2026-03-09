@@ -234,7 +234,7 @@ html, body {
    RESPONSIVE
    ========================================================= */
 @media (max-width: 450px) {
-  .grid-mode { grid-template-columns: repeat(2, 1fr); }
+  .grid-mode { grid-template-columns: repeat(3, 1fr); }
 }
 @media (max-width: 600px) {
   .form-grid { grid-template-columns: 1fr; }

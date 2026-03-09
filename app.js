@@ -106,21 +106,30 @@ function loadBD() {
           </div>
         `;
       } else {
-        wrap.className = "bd-card-list";
-        wrap.innerHTML = `
-          ${coverHtml}
-          <div class="info">
-            <div class="bd-card-title">${escapeHTML(bd.title)}</div>
-            <div class="author">${escapeHTML(bd.author)}</div>
-            <div class="author">${escapeHTML(bd.artist)}</div>
-          </div>
+  // ===== Mode Liste : cover + (titre + auteur + éditeur/année) + actions
+  wrap.className = "bd-card-list";
 
-          <div class="bd-card-actions">
-            <button class="btn" onclick="event.stopPropagation(); editBD(${bd.id})">✏️</button>
-            <button class="btn" onclick="event.stopPropagation(); deleteBD(${bd.id})">🗑️</button>
-          </div>
-        `;
-      }
+  // Année depuis la date (ex: "2021-05-12" -> "2021")
+  const year = (bd.date ?? "").slice(0, 4);
+  const editorYear =
+    bd.editor && year ? `${escapeHTML(bd.editor)} • ${escapeHTML(year)}`
+    : bd.editor        ? `${escapeHTML(bd.editor)}`
+    : year             ? `${escapeHTML(year)}`
+                       : "";
+
+  wrap.innerHTML = `
+    ${coverHtml}
+    <div class="info">
+      <div class="bd-card-title">${escapeHTML(bd.title)}</div>
+      <div class="author">${escapeHTML(bd.author ?? "")}</div>
+      ${editorYear ? `<div class="meta">${editorYear}</div>` : ``}
+    </div>
+    <div class="bd-card-actions">
+      <button class="btn" onclick="event.stopPropagation(); editBD(${bd.id})">✏️</button>
+      <button class="btn" onclick="event.stopPropagation(); deleteBD(${bd.id})">🗑️</button>
+    </div>
+  `;
+}
 
       wrap.onclick = () => openDetail(bd);
       listEl.appendChild(wrap);
@@ -271,20 +280,29 @@ if (collectBtn) {
 loadBD();
 
 /* =========================================================
-   Fiche Détail
+   FICHE DÉTAILLÉE
 ========================================================= */
+
 function openDetail(bd) {
   byId("detailTitle").textContent    = bd.title    ?? "";
-  byId;
+  byId("detailAuthor").textContent   = bd.author   ?? "";
   byId("detailArtist").textContent   = bd.artist   ?? "";
   byId("detailEditor").textContent   = bd.editor   ?? "";
   byId("detailDate").textContent     = bd.date     ?? "";
   byId("detailSynopsis").textContent = bd.synopsis ?? "";
   byId("detailCover").src            = bd.cover    ?? "";
 
+  // Affiche la modale
   detailModalEl.classList.remove("hidden");
+
+  // On masque le FAB (bouton +)
+  addButton.classList.add("hidden");
 }
 
+// ---------- Fermeture avec le bouton “Fermer” ----------
 byId("detailClose").onclick = () => {
   detailModalEl.classList.add("hidden");
+
+  // On réaffiche le FAB
+  addButton.classList.remove("hidden");
 };

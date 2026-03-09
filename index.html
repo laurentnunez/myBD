@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ma Collection BD</title>
+  <title>MyBooks</title>
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
@@ -12,6 +12,7 @@
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <!-- En-tête -->
   <header class="app-header">
@@ -21,10 +22,10 @@
     </div>
 
     <div class="header-actions">
-      <div class="view-toggle" aria-label="Basculer l’affichage grille/liste">
+      <div class="view-toggle">
         <span>Grille</span>
-        <label class="switch" title="Basculer en mode liste">
-          <input type="checkbox" id="viewModeToggle" aria-label="Mode liste" />
+        <label class="switch">
+          <input type="checkbox" id="viewModeToggle" />
           <span class="slider"></span>
         </label>
         <span>Liste</span>
@@ -32,7 +33,7 @@
     </div>
   </header>
 
-  <!-- Zone Filtres -->
+  <!-- Filtres -->
   <section id="filtersArea" class="filters-area">
     <div id="filterBar" class="filter-bar">
       <button class="filter-btn" data-filter="collec">La Collec'</button>
@@ -44,35 +45,22 @@
   </section>
 
   <!-- Liste des BD -->
-  <section
-    id="bdList"
-    class="bd-list grid-mode"
-    aria-live="polite"
-    aria-label="Liste des BD">
-  </section>
+  <section id="bdList" class="bd-list grid-mode"></section>
 
-  <!-- Modale d’ajout / modification -->
-  <div
-    id="modal"
-    class="modal hidden"
-    aria-hidden="true"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="modalTitle">
-
+  <!-- Modale d’ajout / édition -->
+  <div id="modal" class="modal hidden" aria-hidden="true">
     <div class="modal-content">
       <h2 id="modalTitle">Ajouter / Modifier une BD</h2>
 
       <div class="form-grid">
-        <input id="titleInput" placeholder="Titre" aria-label="Titre" />
-        <input id="authorInput" placeholder="Auteur(s)" aria-label="Auteur(s)" />
-        <input id="artistInput" placeholder="Dessinateur(s)" aria-label="Dessinateur(s)" />
-        <input id="editorInput" placeholder="Éditeur" aria-label="Éditeur" />
-
-        <input type="date" id="dateInput" aria-label="Date de parution" />
+        <input id="titleInput" placeholder="Titre" />
+        <input id="authorInput" placeholder="Auteur(s)" />
+        <input id="artistInput" placeholder="Dessinateur(s)" />
+        <input id="editorInput" placeholder="Éditeur" />
+        <input type="date" id="dateInput" />
 
         <label for="statusInput">Statut :</label>
-        <select id="statusInput" aria-label="Statut">
+        <select id="statusInput">
           <option value="a_lire">À lire</option>
           <option value="lu">Lu</option>
           <option value="wishlist">Wishlist</option>
@@ -80,10 +68,12 @@
         </select>
 
         <label for="coverInput">Couverture :</label>
-        <input type="file" accept="image/*" id="coverInput" aria-label="Importer une image de couverture" />
+        <input type="file" accept="image/*" id="coverInput" />
 
-        <!-- Synopsis sur toute la largeur -->
-        <textarea id="synopsisInput" class="synopsis" placeholder="Synopsis" aria-label="Synopsis"></textarea>
+        <textarea
+          id="synopsisInput"
+          class="synopsis"
+          placeholder="Synopsis"></textarea>
       </div>
 
       <div class="modal-actions">
@@ -93,39 +83,33 @@
     </div>
   </div>
 
-  <!-- Modale de Détail (lecture seule) -->
-  <div
-    id="detailModal"
-    class="modal hidden"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="detailTitle">
-
+  <!-- Modale de détail -->
+  <div id="detailModal" class="modal hidden">
     <div class="modal-content detail">
-      <h2 id="detailTitle">Titre</h2>
+      <h2 id="detailTitle"></h2>
+
       <img id="detailCover" class="detail-cover" alt="Couverture" />
 
       <p><strong>Auteur :</strong> <span id="detailAuthor"></span></p>
       <p><strong>Dessinateur :</strong> <span id="detailArtist"></span></p>
       <p><strong>Éditeur :</strong> <span id="detailEditor"></span></p>
-      <p><strong>Date de sortie :</strong> <span id="detailDate"></span></p>
+      <p><strong>Date de parution :</strong> <span id="detailDate"></span></p>
 
       <h3>Synopsis</h3>
       <p id="detailSynopsis"></p>
 
-      <div class="modal-actions">
-        <button id="detailClose" class="btn">Fermer</button>
-      </div>
+      
+<div class="modal-actions">
+      <button id="detailClose" class="btn">Fermer</button>
+</div>
+
     </div>
   </div>
 
-  <!-- FAB (Bouton d’ajout) -->
-  <button
-    id="addButton"
-    class="btn primary add-floating"
-    aria-label="Ajouter une bande dessinée">+</button>
+  <!-- FAB + -->
+  <button id="addButton" class="btn primary add-floating" aria-label="Ajouter une BD">+</button>
 
-  <!-- App -->
+  <!-- JS -->
   <script src="app.js"></script>
 </body>
 </html>

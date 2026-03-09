@@ -7,7 +7,7 @@
 
   <!-- PWA -->
   <link rel="manifest" href="manifest.json" />
-  <meta name="theme-color" content="#3e4a89" />
+  <meta name="theme-color" content="#0e1014" />
 
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
@@ -16,14 +16,15 @@
   <!-- En-tête -->
   <header class="app-header">
     <div class="thehead">
-      <img class="mybookslogo" src="mybookslogo.jpeg" alt="Logo MyBooks"> <h1>MyBooks</h1>
+      <img class="mybookslogo" src="mybookslogo.png" alt="Logo MyBooks" />
+      <h1>MyBooks</h1>
     </div>
+
     <div class="header-actions">
-      <div class="view-toggle">
-        <!-- Toggle Liste / Grille -->
+      <div class="view-toggle" aria-label="Basculer l’affichage grille/liste">
         <span>Grille</span>
-        <label class="switch">
-          <input type="checkbox" id="viewModeToggle">
+        <label class="switch" title="Basculer en mode liste">
+          <input type="checkbox" id="viewModeToggle" aria-label="Mode liste" />
           <span class="slider"></span>
         </label>
         <span>Liste</span>
@@ -39,15 +40,26 @@
       <button class="filter-btn" data-filter="lu">Lu</button>
       <button class="filter-btn" data-filter="a_vendre">À vendre</button>
       <button class="filter-btn" data-filter="wishlist">Wishlist</button>
-      <button id="addButton" class="btn primary add-floating">+</button>
     </div>
   </section>
 
   <!-- Liste des BD -->
-  <section id="bdList" class="bd-list grid-mode" aria-live="polite" aria-label="Liste des BD"></section>
+  <section
+    id="bdList"
+    class="bd-list grid-mode"
+    aria-live="polite"
+    aria-label="Liste des BD">
+  </section>
 
   <!-- Modale d’ajout / modification -->
-  <div id="modal" class="modal hidden" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div
+    id="modal"
+    class="modal hidden"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle">
+
     <div class="modal-content">
       <h2 id="modalTitle">Ajouter / Modifier une BD</h2>
 
@@ -56,7 +68,9 @@
         <input id="authorInput" placeholder="Auteur(s)" aria-label="Auteur(s)" />
         <input id="artistInput" placeholder="Dessinateur(s)" aria-label="Dessinateur(s)" />
         <input id="editorInput" placeholder="Éditeur" aria-label="Éditeur" />
+
         <input type="date" id="dateInput" aria-label="Date de parution" />
+
         <label for="statusInput">Statut :</label>
         <select id="statusInput" aria-label="Statut">
           <option value="a_lire">À lire</option>
@@ -64,8 +78,12 @@
           <option value="wishlist">Wishlist</option>
           <option value="a_vendre">À vendre</option>
         </select>
+
         <label for="coverInput">Couverture :</label>
         <input type="file" accept="image/*" id="coverInput" aria-label="Importer une image de couverture" />
+
+        <!-- Synopsis sur toute la largeur -->
+        <textarea id="synopsisInput" class="synopsis" placeholder="Synopsis" aria-label="Synopsis"></textarea>
       </div>
 
       <div class="modal-actions">
@@ -75,25 +93,39 @@
     </div>
   </div>
 
-<!-- Modale détail BD -->
-<div id="detailModal" class="modal hidden">
-  <div class="modal-content detail">
-    <h2 id="detailTitle"></h2>
-    <img id="detailCover" class="detail-cover" />
-    
-    <p><strong>Auteur :</strong> <span id="detailAuthor"></span></p>
-    <p><strong>Dessinateur :</strong> <span id="detailArtist"></span></p>
-    <p><strong>Éditeur :</strong> <span id="detailEditor"></span></p>
-    <p><strong>Date de sortie :</strong> <span id="detailDate"></span></p>
+  <!-- Modale de Détail (lecture seule) -->
+  <div
+    id="detailModal"
+    class="modal hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="detailTitle">
 
-    <h3>Synopsis</h3>
-    <p id="detailSynopsis"></p>
+    <div class="modal-content detail">
+      <h2 id="detailTitle">Titre</h2>
+      <img id="detailCover" class="detail-cover" alt="Couverture" />
 
-    <button id="detailClose" class="btn">Fermer</button>
+      <p><strong>Auteur :</strong> <span id="detailAuthor"></span></p>
+      <p><strong>Dessinateur :</strong> <span id="detailArtist"></span></p>
+      <p><strong>Éditeur :</strong> <span id="detailEditor"></span></p>
+      <p><strong>Date de sortie :</strong> <span id="detailDate"></span></p>
+
+      <h3>Synopsis</h3>
+      <p id="detailSynopsis"></p>
+
+      <div class="modal-actions">
+        <button id="detailClose" class="btn">Fermer</button>
+      </div>
+    </div>
   </div>
-</div>
+
+  <!-- FAB (Bouton d’ajout) -->
+  <button
+    id="addButton"
+    class="btn primary add-floating"
+    aria-label="Ajouter une bande dessinée">+</button>
 
   <!-- App -->
-  <script type="module" src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

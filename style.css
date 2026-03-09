@@ -1,6 +1,6 @@
 /* =========================================================
    THEME SOMBRE — VARIABLES
-   ========================================================= */
+========================================================= */
 :root {
   --bg: #0e1014;
   --fg: #e5e7eb;
@@ -11,7 +11,6 @@
   --shadow: 0 2px 14px rgba(0,0,0,.3);
 
   --cover-ratio: 3/4;
-  --cover-w: 100%;
   --gap: 12px;
 
   --switch-bg: #334155;
@@ -20,7 +19,7 @@
 
 /* =========================================================
    BASE
-   ========================================================= */
+========================================================= */
 * { box-sizing: border-box; }
 html, body {
   margin: 0;
@@ -29,12 +28,17 @@ html, body {
   background: var(--bg);
   color: var(--fg);
 }
+
 .hidden { display: none !important; }
+
+/* Laisse de la place pour le FAB pour éviter qu'il ne masque le bas */
+body { padding-bottom: 88px; }
 
 /* =========================================================
    HEADER
-   ========================================================= */
+========================================================= */
 .app-header {
+  background: var(--bg);
   color: var(--fg);
   padding: 12px 14px;
   display: flex;
@@ -42,13 +46,15 @@ html, body {
   justify-content: space-between;
 }
 .app-header h1 { margin: 0; font-size: 1.2rem; }
-.header-actions { display: flex; gap: 8px; align-items: center; }
+
 .thehead { display: flex; flex-direction: row; gap: 10px; align-items: center; }
 .mybookslogo { width: 30px; }
 
+.header-actions { display: flex; align-items: center; }
+
 /* =========================================================
    BOUTONS
-   ========================================================= */
+========================================================= */
 .btn {
   padding: 8px 12px;
   border-radius: 8px;
@@ -68,29 +74,14 @@ html, body {
 .btn:hover { filter: brightness(1.07); }
 
 /* =========================================================
-   ZONE FILTRES + TOGGLE
-   ========================================================= */
-.filters-area {
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+   FILTRES
+========================================================= */
+.filters-area { padding: 10px 12px; }
 .filter-bar {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   justify-content: center;
-}
-.filter-bar .add-floating{
-  position: sticky;
-  min-width: 40px;
-  aspect-ratio: 1/1;
-  border-radius: 999px;
-  font-size: 1.2rem;
-  line-height: 1;
-  display: grid;
-  place-items: center;
 }
 .filter-btn {
   padding: 6px 12px;
@@ -108,7 +99,7 @@ html, body {
 
 /* =========================================================
    TOGGLE LISTE / GRILLE
-   ========================================================= */
+========================================================= */
 .view-toggle {
   display: flex;
   align-items: center;
@@ -120,26 +111,23 @@ html, body {
 .switch input { display: none; }
 .slider {
   position: absolute;
-  cursor: pointer;
   inset: 0;
   background: var(--switch-bg);
   border-radius: 34px;
   transition: .3s;
 }
 .slider:before {
-  position: absolute;
   content: "";
-  height: 18px; width: 18px;
-  left: 3px; top: 3px;
-  background: #fff; border-radius: 50%;
-  transition: .3s;
+  position: absolute; left: 3px; top: 3px;
+  height: 18px; width: 18px; background: #fff;
+  border-radius: 50%; transition: .3s;
 }
 .switch input:checked + .slider { background: var(--switch-active); }
 .switch input:checked + .slider:before { transform: translateX(18px); }
 
 /* =========================================================
-   LISTE DES BD — MODE GRILLE
-   ========================================================= */
+   LISTE — GRILLE
+========================================================= */
 .bd-list { padding: 12px; display: grid; gap: 14px; }
 .grid-mode { grid-template-columns: repeat(3, 1fr); }
 
@@ -155,7 +143,6 @@ html, body {
   gap: 6px;
 }
 
-/* Cover */
 .bd-card-grid img,
 .bd-card-list img {
   width: 100%;
@@ -165,13 +152,14 @@ html, body {
   background: #222;
 }
 
-/* Titre */
-.bd-card-title { font-weight: 600; font-size: .85rem; min-height: 2.4em; }
+.bd-card-title { font-weight: 600; font-size: .9rem; min-height: 2.4em; }
+.author { color: var(--muted); font-size: .8rem; }
+
 .bd-card-actions { display: flex; justify-content: center; gap: 8px; }
 
 /* =========================================================
-   MODE LISTE
-   ========================================================= */
+   LISTE — MODE LISTE
+========================================================= */
 .list-mode { display: flex; flex-direction: column; gap: 14px; }
 .bd-card-list {
   background: var(--card);
@@ -180,17 +168,15 @@ html, body {
   padding: 10px;
   box-shadow: var(--shadow);
   display: grid;
-  grid-template-columns: 90px 1fr auto;
+  grid-template-columns: 90px 1fr auto; /* cover / texte / boutons */
   gap: 12px;
   align-items: center;
 }
 .bd-card-list .info { display: flex; flex-direction: column; gap: 4px; }
-.author, .artist { color: var(--muted); font-size: .8rem; }
-.editor { color: var(--fg); font-size: .7rem; font-style: italic; }
 
 /* =========================================================
-   MODALE
-   ========================================================= */
+   MODALES (ajout/édition & détail)
+========================================================= */
 .modal {
   position: fixed;
   inset: 0;
@@ -199,7 +185,7 @@ html, body {
   align-items: center;
   justify-content: center;
   padding: 16px;
-  z-index: 99999;
+  z-index: 99999; /* > FAB */
 }
 .modal-content {
   width: min(90%, 650px);
@@ -209,24 +195,46 @@ html, body {
   padding: 18px;
   box-shadow: var(--shadow);
 }
-.modal-content h2 { margin: 0 0 8px 0; }
+.modal-content h2 { margin-top: 0; }
 
-/* Formulaire modale */
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.form-grid input, .form-grid select {
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.form-grid input,
+.form-grid select {
   padding: 10px;
   background: var(--bg);
   color: var(--fg);
   border-radius: 8px;
   border: 1px solid var(--border);
 }
-.modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px; }
 
-.modal-content.detail {
-  max-width: 500px;
-  text-align: left;
+/* Synopsis sur toute la ligne */
+.form-grid .synopsis {
+  grid-column: 1 / -1;
+  min-height: 100px;
+  padding: 10px;
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  resize: vertical;
 }
 
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Modale de détail */
+.modal-content.detail {
+  max-width: 520px;
+  text-align: left;
+}
 .detail-cover {
   width: 60%;
   max-width: 180px;
@@ -238,55 +246,41 @@ html, body {
   background: #222;
 }
 
+/* =========================================================
+   FAB — Bouton "+"
+========================================================= */
+#addButton {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+  line-height: 1;
+  z-index: 9999;
+  box-shadow: 0 8px 24px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.25);
+  border: none;
+  background: var(--accent);
+  color: #000;
+  cursor: pointer;
+}
+#addButton:hover { filter: brightness(1.07); }
+#addButton:active { transform: translateY(1px) scale(0.98); }
 
 /* =========================================================
    RESPONSIVE
-   ========================================================= */
+========================================================= */
 @media (max-width: 450px) {
+  /* Si tu veux 3 colonnes en très petit écran, garde repeat(3,1fr) */
   .grid-mode { grid-template-columns: repeat(3, 1fr); }
 }
+
 @media (max-width: 600px) {
   .form-grid { grid-template-columns: 1fr; }
   .bd-card-list { grid-template-columns: 70px 1fr auto; }
-}
-
-/* ===========================
-   Floating Action Button (FAB)
-   =========================== */
-#addButton {
-  position: fixed;               /* Toujours visible à l'écran */
-  right: max(16px, env(safe-area-inset-right));
-  bottom: max(16px, env(safe-area-inset-bottom));
-  width: 50px;
-  height: 50px;
-  border-radius: 999px;
-  padding: 0;                    /* le rond ne doit pas gonfler */
-  display: grid;
-  place-items: center;
-  font-size: 1.6rem;             /* le “+” */
-  line-height: 1;
-  z-index: 9999;                 /* au-dessus de la liste */
-  box-shadow: 0 8px 24px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.25);
-  border: none;                  /* on masque la bordure pour un look FAB */
-  background: var(--accent);
-  color: #000;                   /* bon contraste sur l’accent turquoise */
-  cursor: pointer;
-}
-
-#addButton:hover {
-  filter: brightness(1.07);
-}
-
-/* Option : légère animation au press pour feedback */
-#addButton:active {
-  transform: translateY(1px) scale(0.98);
-}
-
-.hidden {
-  display: none !important;
-}
-
-/* Évite que le FAB ne masque le contenu en bas de liste */
-body {
-  padding-bottom: 88px; /* ~56px FAB + marge visuelle, ajuste au besoin */
+  .detail-cover { width: 50%; max-width: 150px; }
 }

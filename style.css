@@ -166,6 +166,7 @@ a { color: var(--accent); }
 .bd-card-title { font-weight: 600; font-size: .7rem; min-height: 2.4em; }
 .author { font-size: .7rem; color: var(--muted); }
 
+
 .bd-card-actions { display: flex; justify-content: center; gap: 8px; }
 
 /* =========================================================
@@ -202,7 +203,7 @@ a { color: var(--accent); }
 /* Ligne secondaire (éditeur • année) */
 .bd-card-list .meta {
   color: var(--muted);
-  font-size: .8rem;
+  font-size: .7rem;
   font-style: italic;
 }
 

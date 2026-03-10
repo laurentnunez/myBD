@@ -43,14 +43,14 @@ const addButton      = document.getElementById("addButton");
 ========================================================= */
 function byId(id) { return document.getElementById(id); }
 
-function escapeHTML(s) {
-  return (s ?? "").toString().replace(/[&<>\"']/g, (m) => ({
+function escapeHTML(s = "") {
+  return s.toString().replace(/[&<>"']/g, c => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;"
-  }[m]));
+  }[c]));
 }
 
 function toBase64(file) {
@@ -301,12 +301,17 @@ function openDetail(bd) {
 }
 
 // Empêche la ré-ouverture immédiate (clic dans la modale ≠ clic sur BOS)
-document.querySelector(".modal-content.detail").addEventListener("click", (e) => {
-  e.stopPropagation();
-});
+//document.querySelector(".modal-content.detail").addEventListener("click", (e) => {
+  //e.stopPropagation();
+//});
+
+function closeDetail(){
+  detailModalEl.classList.add("hidden");
+  addButton.classList.remove("hidden");
+}
 
 // Bouton FERMER (fonctionnel maintenant)
 byId("detailClose").onclick = () => {
-  detailModalEl.classList.add("hidden");
-  addButton.classList.remove("hidden");
+  console.log("[detailClose] clic détecté");
+  closeDetail();
 };

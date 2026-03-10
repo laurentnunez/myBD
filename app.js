@@ -44,7 +44,7 @@ const addButton      = document.getElementById("addButton");
 function byId(id) { return document.getElementById(id); }
 
 function escapeHTML(s) {
-  return (s ?? "").replace(/[&<>\"']/g, (m) => ({
+  return (s ?? "").toString().replace(/[&<>\"']/g, (m) => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
@@ -123,6 +123,7 @@ function loadBD() {
           <div class="info">
             <div class="bd-card-title">${escapeHTML(bd.title)}</div>
             <div class="author">${escapeHTML(bd.author ?? "")}</div>
+            <div class="author">${escapeHTML(bd.artist ?? "")}</div>
             ${editorYear ? `<div class="meta">${editorYear}</div>` : ``}
           </div>
           <div class="bd-card-actions">

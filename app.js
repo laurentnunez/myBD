@@ -315,3 +315,6 @@ byId("detailClose").onclick = () => {
   console.log("[detailClose] clic détecté");
   closeDetail();
 };
+
+
+

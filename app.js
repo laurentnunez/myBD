@@ -135,11 +135,22 @@ function loadBD() {
       return bd.status === currentFilter;
     });
 
-    // Tri
-    items.sort((a, b) =>
-      (a.title ?? "").localeCompare(b.title ?? "", "fr", { sensitivity: "base" })
-    );
+    // Tri par série et par tome
+    items.sort((a, b) => {
+    const sa = (a.series ?? "").toLowerCase();
+    const sb = (b.series ?? "").toLowerCase();
 
+    if (sa !== sb) return sa.localeCompare(sb);
+
+    const ta = Number(a.tome ?? 0);
+    const tb = Number(b.tome ?? 0);
+
+    if (ta !== tb) return ta - tb;
+
+    return (a.title ?? "").localeCompare(b.title ?? "", "fr", { sensitivity: "base" });
+    });
+
+    
     // Reset UI
     listEl.innerHTML = "";
     listEl.classList.toggle("grid-mode", listMode === "grid");

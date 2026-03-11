@@ -85,6 +85,31 @@
       </div>
     </div>
   </div>
+
+<!-- Modale Détails BD -->
+<div id="detailModal" class="modal hidden">
+  <div class="modal-content detail-modal">
+    
+    <img id="detailCover" class="detail-cover" alt="Couverture BD">
+    
+    <h2 id="detailTitle"></h2>
+
+    <p><strong>Auteur :</strong> <span id="detailAuthor"></span></p>
+    <p><strong>Dessinateur :</strong> <span id="detailArtist"></span></p>
+    <p><strong>Éditeur :</strong> <span id="detailEditor"></span></p>
+    <p><strong>Parution :</strong> <span id="detailDate"></span></p>
+
+    <h3>Synopsis</h3>
+    <p id="detailSynopsis"></p>
+
+    <div class="modal-actions">
+      <button id="detailEdit" class="btn">✏️ Modifier</button>
+      <button id="detailDelete" class="btn">🗑️ Supprimer</button>
+      <button id="detailClose" class="btn primary">Fermer</button>
+    </div>
+  </div>
+</div>
+
     
   <!-- JS -->
   <script src="app.js"></script>

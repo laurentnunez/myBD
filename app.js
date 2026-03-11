@@ -56,7 +56,7 @@ function toBase64(file) {
 }
 
 /* =========================================================
-   Toast de confirmation (avec check SVG #4de8ce)
+   Toast + icône SVG accent
 ========================================================= */
 function showToast(message, type = "success") {
   const root = document.getElementById("toastRoot") || document.body;
@@ -67,14 +67,14 @@ function showToast(message, type = "success") {
   el.setAttribute("aria-live", "polite");
 
   const iconSuccess = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
       <path d="M20 6L9 17l-5-5"
             stroke="#4de8ce" stroke-width="3"
             stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   `;
   const iconError = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
       <path d="M12 4v8m0 4v2M4 12h16"
             stroke="#fff" stroke-width="2.5"
             stroke-linecap="round" stroke-linejoin="round"/>
@@ -87,14 +87,33 @@ function showToast(message, type = "success") {
   `;
 
   root.appendChild(el);
-
-  // Déclenche l'animation CSS
-  // eslint-disable-next-line no-unused-expressions
-  el.offsetHeight;
+  el.offsetHeight; 
   el.classList.add("show");
 
-  // Suppression après animation
   setTimeout(() => el.remove(), 2600);
+}
+
+/* =========================================================
+   MODALE DÉTAIL BD — nouvelle version
+========================================================= */
+function openDetailModal(bd) {
+  byId("detailTitle").textContent = bd.title ?? "";
+  byId("detailAuthor").textContent = bd.author ?? "";
+  byId("detailArtist").textContent = bd.artist ?? "";
+  byId("detailEditor").textContent = bd.editor ?? "";
+  byId("detailDate").textContent = bd.date ?? "";
+  byId("detailSynopsis").textContent = bd.synopsis ?? "";
+  byId("detailCover").src = bd.cover ?? "";
+
+  byId("detailModal").classList.remove("hidden");
+  byId("addButton").classList.add("hidden");
+
+  byId("detailModal").dataset.bdId = bd.id;
+}
+
+function closeDetailModal() {
+  byId("detailModal").classList.add("hidden");
+  byId("addButton").classList.remove("hidden");
 }
 
 /* =========================================================
@@ -112,7 +131,7 @@ function loadBD() {
     // Filtre
     items = items.filter((bd) => {
       if (currentFilter === "collec")
-        return bd.status === "a_lire" || bd.status === "lu";   // <-- corrigé
+        return bd.status === "a_lire" || bd.status === "lu";
       return bd.status === currentFilter;
     });
 
@@ -128,12 +147,13 @@ function loadBD() {
 
     items.forEach((bd) => {
       const wrap = document.createElement("div");
-      wrap.dataset.bdId = bd.id; // identifiant pour highlight
+      wrap.dataset.bdId = bd.id;
 
       const coverHtml = bd.cover
-        ? `<img src="${escapeHTML(bd.cover)}" alt="Couverture" class="bd-cover-img" />`
+        ? `<img src="${escapeHTML(bd.cover)}" class="bd-cover-img" alt="Couverture">`
         : `<div class="bd-cover"></div>`;
 
+      // MODE GRILLE
       if (listMode === "grid") {
         wrap.className = "bd-card-grid";
         wrap.innerHTML = `
@@ -141,13 +161,17 @@ function loadBD() {
           <div class="bd-card-title">${escapeHTML(bd.title)}</div>
           <div class="author">${escapeHTML(bd.author ?? "")}</div>
           <div class="author">${escapeHTML(bd.artist ?? "")}</div>
+
           <div class="bd-card-actions">
             <button class="btn" onclick="event.stopPropagation(); editBD(${bd.id})">✏️</button>
             <button class="btn" onclick="event.stopPropagation(); deleteBD(${bd.id})">🗑️</button>
           </div>
         `;
-      } else {
+      }
+      // MODE LISTE
+      else {
         wrap.className = "bd-card-list";
+
         const year = (bd.date ?? "").slice(0, 4);
         const editorYear =
           bd.editor && year ? `${escapeHTML(bd.editor)} • ${escapeHTML(year)}`
@@ -157,12 +181,14 @@ function loadBD() {
 
         wrap.innerHTML = `
           ${coverHtml}
+
           <div class="info">
             <div class="bd-card-title">${escapeHTML(bd.title)}</div>
             <div class="author">${escapeHTML(bd.author ?? "")}</div>
             <div class="author">${escapeHTML(bd.artist ?? "")}</div>
             ${editorYear ? `<div class="meta">${editorYear}</div>` : ""}
           </div>
+
           <div class="bd-card-actions">
             <button class="btn" onclick="event.stopPropagation(); editBD(${bd.id})">✏️</button>
             <button class="btn" onclick="event.stopPropagation(); deleteBD(${bd.id})">🗑️</button>
@@ -170,8 +196,8 @@ function loadBD() {
         `;
       }
 
-      // Plus de modale détail → aucun clic par défaut
-      wrap.onclick = null;
+      // Clic sur la carte → ouvre la modale Détails
+      wrap.onclick = () => openDetailModal(bd);
 
       listEl.appendChild(wrap);
     });
@@ -179,7 +205,7 @@ function loadBD() {
 }
 
 /* =========================================================
-   Toggle Grille / Liste + init listeners
+   DOMContentLoaded
 ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
   const viewModeToggle = byId("viewModeToggle");
@@ -224,7 +250,7 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   /* =========================================================
-     Modale ajout/édition
+     Modale Ajout/Édition
   ========================================================= */
   function openModal() {
     modalEl.classList.remove("hidden");
@@ -245,7 +271,24 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   /* =========================================================
-     Enregistrer BD (+ toast + highlight)
+     Boutons modale Détails
+  ========================================================= */
+  byId("detailClose").onclick = closeDetailModal;
+
+  byId("detailEdit").onclick = () => {
+    const id = Number(byId("detailModal").dataset.bdId);
+    closeDetailModal();
+    editBD(id);
+  };
+
+  byId("detailDelete").onclick = () => {
+    const id = Number(byId("detailModal").dataset.bdId);
+    closeDetailModal();
+    deleteBD(id);
+  };
+
+  /* =========================================================
+     Enregistrer BD
   ========================================================= */
   byId("saveButton").onclick = async () => {
     const file = byId("coverInput").files?.[0];
@@ -287,7 +330,7 @@ window.addEventListener("DOMContentLoaded", () => {
         "success"
       );
 
-      // Highlight de la nouvelle BD (si ajout)
+      // Highlight carte ajoutée
       if (!isEdit && newId != null) {
         setTimeout(() => {
           const card = document.querySelector(`[data-bd-id="${newId}"]`);
@@ -302,14 +345,11 @@ window.addEventListener("DOMContentLoaded", () => {
   };
 
   /* =========================================================
-     Reset Formulaire
+     Reset Form
   ========================================================= */
   function resetForm() {
-    ["titleInput", "authorInput", "artistInput", "editorInput", "dateInput", "synopsisInput"]
-      .forEach(id => {
-        const el = byId(id);
-        if (el) el.value = "";
-      });
+    ["titleInput","authorInput","artistInput","editorInput","dateInput","synopsisInput"]
+      .forEach(id => { const el = byId(id); if (el) el.value = ""; });
 
     byId("statusInput").value = "a_lire";
     byId("coverInput").value = "";

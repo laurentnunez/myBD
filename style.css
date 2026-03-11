@@ -347,6 +347,37 @@ display: grid;
   100% { box-shadow: 0 0 0px 0px rgba(77,232,206,0.0); filter: brightness(1.00); }
 }
 
+/* ===============================
+   MODALE DÉTAIL BD (nouvelle version)
+==================================*/
+
+.detail-modal {
+  width: min(90%, 500px);
+  text-align: left;
+}
+
+.detail-cover {
+  width: 100%;
+  max-width: 200px;
+  aspect-ratio: var(--cover-ratio);
+  object-fit: cover;
+  border-radius: 10px;
+  background: #111;
+  margin: 0 auto 16px;
+  display: block;
+}
+
+.detail-modal h2 {
+  margin-top: 0;
+  text-align: center;
+}
+
+.detail-modal h3 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+
 /* =========================================================
    RESPONSIVE
 ========================================================= */

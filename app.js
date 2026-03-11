@@ -97,7 +97,9 @@ function showToast(message, type = "success") {
    MODALE DÉTAIL BD — nouvelle version
 ========================================================= */
 function openDetailModal(bd) {
+  byId("detailSeries").textContent = bd.series ?? "";
   byId("detailTitle").textContent = bd.title ?? "";
+  byId("detailTome").textContent = bd.tome ?? "";
   byId("detailAuthor").textContent = bd.author ?? "";
   byId("detailArtist").textContent = bd.artist ?? "";
   byId("detailEditor").textContent = bd.editor ?? "";

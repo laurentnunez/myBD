@@ -382,16 +382,21 @@ display: grid;
   display: block;
 }
 
-.detail-modal h2 {
+.detail-modal h3 {
   margin-top: 0;
   text-align: center;
 }
 
 .detail-modal h3 {
   margin-top: 16px;
-  margin-bottom: 8px;
+  margin-bottom: 5px;
 }
 
+.theSeries {
+  display: flex;
+ justify-content:space-evenly
+
+}
 
 /* =========================================================
    RESPONSIVE

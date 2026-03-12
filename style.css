@@ -245,7 +245,7 @@ a:hover { text-decoration: underline; }
   font-size: .7rem; 
    
   letter-spacing: .2px; }
-.author { font-size: .72rem; color: var(--muted); }
+.author { font-size: .6rem; color: var(--muted); }
 .bd-card-actions { display: flex; justify-content: center; gap: 8px; }
 .bd-card-list .info { display: flex; flex-direction: column; gap: 2px; }
 .bd-card-list .meta { color: var(--muted); font-size: .7rem; font-style: italic; }

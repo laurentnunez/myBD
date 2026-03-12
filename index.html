@@ -88,26 +88,36 @@
 <!-- Modale Détails BD -->
 <div id="detailModal" class="modal hidden">
   <div class="modal-content detail-modal">
-    
-    <img id="detailCover" class="detail-cover" alt="Couverture BD">
-    
-    <h3 id="detailSeries"></h3>
-    <div class="theSeries">
-      <p><strong>Tome :</strong><h3 id="detailTome"></h3>
-      <h3 id="detailTitle"></h3>
+  <div class="detail-layout">
+    <!-- Cover -->
+    <div class="detail-cover-wrap">
+      <img id="detailCover" class="detail-cover" alt="Couverture BD">
     </div>
 
-    <p><strong>Auteur :</strong> <span id="detailAuthor"></span></p>
-    <p><strong>Dessinateur :</strong> <span id="detailArtist"></span></p>
-    <p><strong>Éditeur :</strong> <span id="detailEditor"></span></p>
-    <p><strong>Parution :</strong> <span id="detailDate"></span></p>
+    <!-- Infos -->
+    <div class="detail-info">
+      <div class="detail-topline">
+        <span id="detailSeries" class="chip chip-accent"></span>
+        <span class="chip"><span class="chip-label">Tome</span> <span id="detailTome"></span></span>
+      </div>
 
-    <div class="modal-actions">
-      <button id="detailEdit" class="btn">✏️ Modifier</button>
-      <button id="detailDelete" class="btn">🗑️ Supprimer</button>
-      <button id="detailClose" class="btn primary">Fermer</button>
+      <h2 id="detailTitle" class="detail-title"></h2>
+
+      <div class="detail-meta">
+        <div class="meta-row"><span class="meta-label">Auteur</span><span id="detailAuthor" class="meta-value"></span></div>
+        <div class="meta-row"><span class="meta-label">Dessinateur</span><span id="detailArtist" class="meta-value"></span></div>
+        <div class="meta-row"><span class="meta-label">Éditeur</span><span id="detailEditor" class="meta-value"></span></div>
+        <div class="meta-row"><span class="meta-label">Parution</span><span id="detailDate" class="meta-value"></span></div>
+      </div>
     </div>
   </div>
+
+  <div class="modal-actions">
+    <button id="detailEdit" class="btn">✏️ Modifier</button>
+    <button id="detailDelete" class="btn">🗑️ Supprimer</button>
+    <button id="detailClose" class="btn primary">Fermer</button>
+  </div>
+</div>
 </div>
 
     

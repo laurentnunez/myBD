@@ -58,29 +58,24 @@
       <div class="form-grid">
         <input id="seriesInput" placeholder="Série" />
         <div class="titleTome">
-          <input id="tomeInput" class="tomeInput" type="number" placeholder="Tome" min="1" />
+          <input id="tomeInput" class="tomeInput" type="number" placeholder="N°" min="1" />
           <input id="titleInput" placeholder="Titre" />
         </div>
         <input id="authorInput" placeholder="Auteur(s)" />
         <input id="artistInput" placeholder="Dessinateur(s)" />
         <input id="editorInput" placeholder="Éditeur" />
-        <input type="date" id="dateInput" placeholder="Date"/>
-
-        <label for="statusInput">Statut :</label>
-        <select id="statusInput">
-          <option value="a_lire">À lire</option>
-          <option value="lu">Lu</option>
-          <option value="wishlist">Wishlist</option>
-          <option value="a_vendre">À vendre</option>
-        </select>
-
+      
+        <div class="date-status-row">
+          <input type="date" id="dateInput" placeholder="Date"/>
+          <select id="statusInput">
+            <option value="a_lire">À lire</option>
+            <option value="lu">Lu</option>
+            <option value="wishlist">Wishlist</option>
+          </select>
+        </div>
         <label for="coverInput">Couverture :</label>
         <input type="file" accept="image/*" id="coverInput" />
 
-        <textarea
-          id="synopsisInput"
-          class="synopsis"
-          placeholder="Synopsis"></textarea>
       </div>
 
       <div class="modal-actions">
@@ -106,9 +101,6 @@
     <p><strong>Dessinateur :</strong> <span id="detailArtist"></span></p>
     <p><strong>Éditeur :</strong> <span id="detailEditor"></span></p>
     <p><strong>Parution :</strong> <span id="detailDate"></span></p>
-
-    <h3>Synopsis</h3>
-    <p id="detailSynopsis"></p>
 
     <div class="modal-actions">
       <button id="detailEdit" class="btn">✏️ Modifier</button>

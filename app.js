@@ -104,7 +104,6 @@ function openDetailModal(bd) {
   byId("detailArtist").textContent = bd.artist ?? "";
   byId("detailEditor").textContent = bd.editor ?? "";
   byId("detailDate").textContent = bd.date ?? "";
-  byId("detailSynopsis").textContent = bd.synopsis ?? "";
   byId("detailCover").src = bd.cover ?? "";
 
   byId("detailModal").classList.remove("hidden");
@@ -263,7 +262,6 @@ window.addEventListener("DOMContentLoaded", () => {
       byId("editorInput").value = bd.editor ?? "";
       byId("dateInput").value = bd.date ?? "";
       byId("statusInput").value = bd.status ?? "a_lire";
-      byId("synopsisInput").value = bd.synopsis ?? "";
       byId("seriesInput").value = bd.series ?? "";
       byId("tomeInput").value = bd.tome ?? "";
       importedCoverDataURL = bd.cover ?? "";
@@ -327,8 +325,7 @@ window.addEventListener("DOMContentLoaded", () => {
       tome: Number(byId("tomeInput").value),
       date: byId("dateInput").value,
       status: byId("statusInput").value,
-      cover,
-      synopsis: byId("synopsisInput").value
+      cover
     };
 
     const editId = modalEl.dataset.editId;
@@ -374,7 +371,7 @@ window.addEventListener("DOMContentLoaded", () => {
      Reset Form
   ========================================================= */
   function resetForm() {
-    ["titleInput","authorInput","artistInput","editorInput","dateInput","synopsisInput"]
+    ["titleInput","authorInput","artistInput","editorInput","dateInput"]
       .forEach(id => { const el = byId(id); if (el) el.value = ""; });
 
     byId("statusInput").value = "a_lire";

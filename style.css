@@ -204,7 +204,7 @@ a:hover { text-decoration: underline; }
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 4px;
+  padding: 2px;
   box-shadow: var(--shadow);
   display: grid;
   grid-template-columns: 100px 1fr auto; /* cover / texte / boutons */
@@ -315,7 +315,7 @@ display: grid;
 
 
 .tomeInput {
-  width: 80px;        /* largeur fixe */
+  width: 50px;        /* largeur fixe */
   flex-shrink: 0;     /* NE PAS rétrécir encore plus */
   text-align: center; /* esthétique */
 }
@@ -337,6 +337,25 @@ display: grid;
   border-radius: 8px;
   resize: vertical;
 }
+
+/* Ligne Date + Statut dans la modale */
+.date-status-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Le champ date prend plus de place */
+#dateInput {
+  flex: 1;
+}
+
+/* Le statut prend juste ce qu'il faut */
+#statusInput {
+  width: 130px;  /* valeur idéale pour mobile + desktop */
+}
+
+
 
 /* =========================================================
    TOAST (discret, fond carte sombre + icône accent)

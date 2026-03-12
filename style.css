@@ -188,7 +188,7 @@ a:hover { text-decoration: underline; }
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
   transition: transform .08s ease, box-shadow .2s ease;
 }
 .bd-card-grid:hover { 
@@ -241,8 +241,8 @@ a:hover { text-decoration: underline; }
 
 /* Titres & métas */
 .bd-card-title { 
-  font-weight: 500; 
-  font-size: .78rem; 
+  font-weight: 400; 
+  font-size: .7rem; 
   min-height: 2.2em; 
   letter-spacing: .2px; }
 .author { font-size: .72rem; color: var(--muted); }
@@ -302,6 +302,17 @@ display: grid;
   border-radius: 8px;
   border: 1px solid var(--border);
 }
+
+.tomeInput {
+  
+
+
+}
+
+.titleTome {
+  display: flex;
+}
+
 .form-grid .synopsis {
   grid-column: 1 / -1;
   min-height: 100px;

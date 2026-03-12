@@ -188,10 +188,8 @@ const tomeTitle =
         wrap.innerHTML = `
           ${coverHtml}
           <div class="bd-card-title">${escapeHTML(bd.series)}</div>
-          ${tomeTitle ? `<div class="bd-card-title">${tomeTitle}</div>` : ""}
-          <div class="author">${escapeHTML(bd.author ?? "")}</div>
-          <div class="author">${escapeHTML(bd.artist ?? "")}</div>
-          ${editorYear ? `<div class="author">${editorYear}</div>` : ""}
+          ${tomeTitle ? `<div class="author">${tomeTitle}</div>` : ""}
+          
           <div class="bd-card-actions">
             <button class="btn" onclick="event.stopPropagation(); editBD(${bd.id})">✏️</button>
             <button class="btn" onclick="event.stopPropagation(); deleteBD(${bd.id})">🗑️</button>

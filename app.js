@@ -165,6 +165,8 @@ function loadBD() {
       });
     });
 
+    updateStats(items);
+
     // Reset UI
     listEl.innerHTML = "";
     listEl.classList.toggle("grid-mode", listMode === "grid");
@@ -240,6 +242,34 @@ function loadBD() {
 }
 
 /* =========================================================
+   Statistiques
+========================================================= */
+
+function updateStats(items) {
+    const statsArea = byId("statsArea");
+
+    // Stats visibles seulement pour "collec" ou "lu"
+    if (currentFilter !== "collec" && currentFilter !== "lu") {
+        statsArea.classList.add("hidden");
+        return;
+    }
+
+    statsArea.classList.remove("hidden");
+
+    const total = items.length;
+    const read = items.filter(bd => bd.status === "lu").length;
+
+    // Pages (si le champ n’existe pas encore : 0)
+    const pages = items.reduce((sum, bd) => sum + (Number(bd.pages) || 0), 0);
+
+    byId("statTotal").textContent = total;
+    byId("statRead").textContent = read;
+    byId("statPages").textContent = pages;
+}
+
+
+
+/* =========================================================
    DOMContentLoaded
 ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
@@ -276,6 +306,7 @@ window.addEventListener("DOMContentLoaded", () => {
       byId("authorInput").value = bd.author ?? "";
       byId("artistInput").value = bd.artist ?? "";
       byId("editorInput").value = bd.editor ?? "";
+      byId("pagesInput").value = bd.pages ?? "";
       byId("dateInput").value = bd.date ?? "";
       byId("statusInput").value = bd.status ?? "a_lire";
       importedCoverDataURL = bd.cover ?? "";
@@ -340,6 +371,7 @@ window.addEventListener("DOMContentLoaded", () => {
       editor: byId("editorInput").value,
       date: byId("dateInput").value,
       status: byId("statusInput").value,
+      pages: Number(byId("pagesInput").value),
       cover,
       synopsis: ""  // tu as supprimé le champ, donc vide proprement
     };
@@ -384,7 +416,7 @@ window.addEventListener("DOMContentLoaded", () => {
      Reset Form
   ========================================================= */
   function resetForm() {
-    ["seriesInput","tomeInput","titleInput","authorInput","artistInput","editorInput","dateInput"]
+    ["seriesInput","tomeInput","titleInput","authorInput","artistInput","editorInput","dateInput", "pagesInput"]
       .forEach((id) => {
         const el = byId(id);
         if (el) el.value = "";

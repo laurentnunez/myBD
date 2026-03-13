@@ -47,6 +47,13 @@
   </section>
 </div>
 
+<!-- Stastistiques -->
+<section id="statsArea" class="stats-area hidden">
+    <div class="stats-item"><strong>Total BD :</strong> <span id="statTotal">0</span></div>
+    <div class="stats-item"><strong>BD lues :</strong> <span id="statRead">0</span></div>
+    <div class="stats-item"><strong>Pages lues :</strong> <span id="statPages">0</span></div>
+</section>
+
   <!-- Liste des BD -->
   <section id="bdList" class="bd-list grid-mode"></section>
 
@@ -64,6 +71,7 @@
         <input id="authorInput" placeholder="Auteur(s)" />
         <input id="artistInput" placeholder="Dessinateur(s)" />
         <input id="editorInput" placeholder="Éditeur" />
+      <input id="pagesInput" type="number" placeholder="Pages" min="1" />
       
         <div class="date-status-row">
           <input type="date" id="dateInput" placeholder="Date"/>

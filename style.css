@@ -188,7 +188,7 @@ a:hover { text-decoration: underline; }
   box-shadow: var(--shadow);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
   transition: transform .08s ease, box-shadow .2s ease;
 }
 .bd-card-grid:hover { 
@@ -245,7 +245,12 @@ a:hover { text-decoration: underline; }
   font-size: .7rem; 
    
   letter-spacing: .2px; }
-.author { font-size: .6rem; color: var(--muted); }
+.author { 
+  font-size: .6rem; 
+  color: var(--muted); 
+  padding-bottom: 4px;
+}
+
 .bd-card-actions { display: flex; justify-content: center; gap: 8px; }
 .bd-card-list .info { 
   display: flex; 

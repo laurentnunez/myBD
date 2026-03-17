@@ -239,8 +239,8 @@ bd-list.grouped {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding:  50px 16px 16px;
-  z-index: 99999;
+  padding: 16px;
+  z-index: 300000;
 }
 .modal-content {
   width: min(90%, 560px);
@@ -251,13 +251,14 @@ bd-list.grouped {
   padding: 18px;
   box-shadow: var(--shadow);
   position: relative;
-  z-index: 100000;
+  z-index: 300001;
   max-height: 90vh;
   overflow-y: auto;
 }
 
-
-
+body.modal-open {
+  overflow: hidden;
+}
 
 .modal-content h2 { margin: 0 0 8px 0; }
 .modal-actions {
@@ -425,13 +426,10 @@ display: grid;
 }
 
 .detail-modal h3 {
-  margin-top: 0;
-  text-align: center;
-}
-
-.detail-modal h3 {
   margin-top: 16px;
+  text-align: center;
   margin-bottom: 5px;
+
 }
 
 .theSeries {
@@ -480,8 +478,10 @@ display: grid;
    Détail BD — layout compact
 =================================*/
 .detail-modal {
-  width: min(92%, 760px);           /* un peu plus large qu'avant, sans dépasser */
+  width: min(92%, 900px);           /* un peu plus large qu'avant, sans dépasser */
+  max-height: calc(100vh - 32px);
   text-align: left;
+  overflow: hidden;
   padding-bottom: 14px;
 }
 
@@ -490,6 +490,8 @@ display: grid;
   display: grid;
   grid-template-columns: 1fr;       /* mobile par défaut */
   gap: 16px;
+  overflow: auto;
+  max-height: 100%;
   align-items: start;
 }
 
@@ -501,7 +503,7 @@ display: grid;
 
 .detail-cover {
   width: 100%;
-  max-width: 320px;                 /* cover agrandie */
+  max-width: 380px;                 /* cover agrandie */
   aspect-ratio: var(--cover-ratio);
   object-fit: cover;
   border-radius: 12px;
@@ -573,7 +575,7 @@ display: grid;
 /* 2 colonnes dès >= 640px : cover | infos */
 @media (min-width: 640px) {
   .detail-layout {
-    grid-template-columns: 1fr 1.4fr;
+    grid-template-columns: 1fr 1.7fr;
     gap: 18px;
   }
   .detail-title {

@@ -117,7 +117,7 @@ function openDetailModal(bd) {
 
   detail.classList.remove("hidden", "hide");
   detail.classList.add("show");
-
+  document.body.classList.add("modal-open"); 
   byId("addButton").classList.add("hidden");
   detail.dataset.bdId = bd.id;
 }
@@ -129,6 +129,7 @@ function closeDetailModal() {
 
   setTimeout(() => {
     detail.classList.add("hidden");
+    document.body.classList.remove("modal-open");
     byId("addButton").classList.remove("hidden");
   }, 250);
 }
@@ -382,6 +383,7 @@ if (groupToggle) {
   function openModal() {
     modalEl.classList.remove("hidden", "hide");
     modalEl.classList.add("show");
+    document.body.classList.add("modal-open");
     addButton.classList.add("hidden");
   }
 
@@ -391,6 +393,7 @@ if (groupToggle) {
 
     setTimeout(() => {
       modalEl.classList.add("hidden");
+      document.body.classList.remove("modal-open");
       addButton.classList.remove("hidden");
       delete modalEl.dataset.editId;
     }, 250);

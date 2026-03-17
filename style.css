@@ -328,7 +328,7 @@ display: grid;
   display: flex;
   gap: 10px;
   width: 100%;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 /* Éditeur réduit */
@@ -340,7 +340,7 @@ display: grid;
 /* Pages réduit */
 #pagesInput {
   flex: 0 0 auto;
-  width: clamp(64px, 22vw, 96px);      /* largeur fixe adaptée à 4 chiffres */
+  width: 90px; 
   text-align: center;
   box-sizing: border-box;
 }

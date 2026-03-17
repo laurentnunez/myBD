@@ -13,6 +13,13 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 
+<!-- Racine Toast -->
+  <div id="toastRoot" aria-live="polite" aria-atomic="true"></div>
+  <!-- JS -->
+  <script src="app.js"></script>
+</body>
+</html>
+
 <body>
   <!-- En-tête -->
 <div class="top-area">   
@@ -21,17 +28,15 @@
       <img class="mybookslogo" src="mybookslogo.png" alt="Logo MyBooks" />
       <h1>MyBooks</h1>
     </div>
+    <div class="group-toggle" title="Grouper les tomes par série (mode grille)">
+      <span>Album</span>
+      <label class="switch">
+        <input type="checkbox" id="groupBySeriesToggle" />
+        <span class="slider"></span>
+      </label>
+      <span>Série</span>
+    </div> 
 
-    <div class="header-actions">
-      <div class="view-toggle">
-        <span>Grille</span>
-        <label class="switch">
-          <input type="checkbox" id="viewModeToggle" />
-          <span class="slider"></span>
-        </label>
-        <span>Liste</span>
-      </div>
-    </div>
   </header>
 
   <!-- Filtres -->
@@ -42,9 +47,13 @@
       <button class="filter-btn" data-filter="lu">Lu</button>
       <!--<button class="filter-btn" data-filter="a_vendre">À vendre</button> -->
       <button class="filter-btn" data-filter="wishlist">Wishlist</button>
+    
+       
+    
     </div>
     <button id="addButton" class="btn primary add-floating" aria-label="Ajouter une BD">+</button>
   </section>
+  
 </div>
 
 <!-- Stastistiques -->

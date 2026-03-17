@@ -1,3 +1,4 @@
+
 /* =========================================================
    PWA : Service Worker
 ========================================================= */
@@ -31,6 +32,7 @@ request.onsuccess = () => {
 let currentFilter = "collec";
 let importedCoverDataURL = "";
 let listMode = "grid";
+let groupBySeries = false;
 
 /* =========================================================
    Utils
@@ -60,10 +62,11 @@ function toBase64(file) {
 /* =========================================================
    Toast
 ========================================================= */
+
 function showToast(message, type = "success") {
   const root = document.getElementById("toastRoot") || document.body;
-
   const el = document.createElement("div");
+
   el.className = `toast ${type}`;
   el.setAttribute("role", "status");
   el.setAttribute("aria-live", "polite");
@@ -135,156 +138,146 @@ function closeDetailModal() {
 ========================================================= */
 function loadBD() {
   const listEl = byId("bdList");
-
   const tx = db.transaction("bd", "readonly");
   const store = tx.objectStore("bd");
 
   store.getAll().onsuccess = (e) => {
     let items = e.target.result ?? [];
 
-    // Filtre
+    // ----- Filtrage -----
     items = items.filter((bd) => {
-      if (currentFilter === "collec")
-        return bd.status === "a_lire" || bd.status === "lu";
+      if (currentFilter === "collec") return bd.status === "a_lire" || bd.status === "lu";
       return bd.status === currentFilter;
     });
 
-    // TRI : Série → Tome → Titre
+    // ----- Tri global (Série → Tome → Titre) -----
     items.sort((a, b) => {
       const sa = (a.series ?? "").toLowerCase();
       const sb = (b.series ?? "").toLowerCase();
-
-      if (sa !== sb) return sa.localeCompare(sb);
-
+      if (sa !== sb) return sa.localeCompare(sb, "fr", { sensitivity: "base" });
       const ta = Number(a.tome ?? 0);
       const tb = Number(b.tome ?? 0);
       if (ta !== tb) return ta - tb;
-
-      return (a.title ?? "").localeCompare(b.title ?? "", "fr", {
-        sensitivity: "base",
-      });
+      return (a.title ?? "").localeCompare(b.title ?? "", "fr", { sensitivity: "base" });
     });
 
-    updateStats(items);
-
-    // Reset UI
+    // ----- Reset UI -----
     listEl.innerHTML = "";
-    listEl.classList.toggle("grid-mode", listMode === "grid");
-    listEl.classList.toggle("list-mode", listMode === "list");
 
-    items.forEach((bd) => {
-      const wrap = document.createElement("div");
-      wrap.dataset.bdId = bd.id;
+    if (groupBySeries) {
+      // Mode GROUPE PAR SÉRIE
+      listEl.classList.remove("grid-mode", "list-mode");
+      listEl.classList.add("grouped");
 
-      const coverHtml = bd.cover
-        ? `<img src="${escapeHTML(bd.cover)}" class="bd-cover-img" alt="Couverture">`
-        : `<div class="bd-cover"></div>`;
+      // Grouping
+      const groups = new Map();
+      for (const bd of items) {
+        const key = (bd.series && bd.series.trim()) ? bd.series.trim() : "Sans série";
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(bd);
+      }
 
-      const year = (bd.date ?? "").slice(0, 4);
+      // Ordre des groupes (alpha FR)
+      const groupNames = [...groups.keys()].sort((a, b) =>
+        a.localeCompare(b, "fr", { sensitivity: "base" })
+      );
 
-      const serie = escapeHTML(bd.series ?? "");
-      const tome = escapeHTML(bd.tome ?? "");
-      const title = escapeHTML(bd.title ?? "");
+      for (const name of groupNames) {
+        const tomes = groups.get(name) ?? [];
 
-      const editorYear =
-        bd.editor && year
-          ? `${escapeHTML(bd.editor)} • ${year}`
-          : bd.editor
-          ? escapeHTML(bd.editor)
-          : year
-          ? year
-          : "";
+        // Tri de sécurité par tome dans chaque groupe
+        tomes.sort((a, b) => (Number(a.tome ?? 0) - Number(b.tome ?? 0)));
 
-      const tomeTitle =
-        bd.tome && bd.title
-          ? `${tome} • ${title}`
-          : bd.tome
-          ? tome
-          : title;
+        // Wrapper de série
+        const group = document.createElement("div");
+        group.className = "series-group";
 
-      /* ===========================
-         MODE GRILLE
-      ============================ */
-      if (listMode === "grid") {
+        // En-tête + compteur
+        const header = document.createElement("div");
+        header.className = "series-header";
+        header.textContent = name;
+        const count = document.createElement("span");
+        count.className = "series-count";
+        count.textContent = ` (${tomes.length})`;
+        header.appendChild(count);
+        group.appendChild(header);
+
+        // Grille des tomes
+        const grid = document.createElement("div");
+        grid.className = "series-grid";
+
+        tomes.forEach((bd) => {
+          const card = document.createElement("div");
+          card.className = "bd-card-grid";
+          card.dataset.bdId = bd.id;
+
+          const coverHtml = bd.cover
+            ? `<img src="${escapeHTML(bd.cover)}" class="bd-cover-img" alt="Couverture">`
+            : `<div class="bd-cover" aria-label="Pas de couverture"></div>`;
+
+          const tome = escapeHTML(bd.tome ?? "");
+          const title = escapeHTML(bd.title ?? "");
+          const label = (bd.tome && bd.title) ? `${tome} • ${title}` : (bd.tome ? tome : title);
+
+          card.innerHTML = `
+            ${coverHtml}
+            <div class="bd-card-title">${label}</div>
+          `;
+          card.onclick = () => openDetailModal(bd);
+          grid.appendChild(card);
+        });
+
+        group.appendChild(grid);
+        listEl.appendChild(group);
+      }
+    } else {
+      // Mode ALBUM (grille simple)
+      listEl.classList.remove("grouped", "list-mode");
+      listEl.classList.add("grid-mode");
+
+      items.forEach((bd) => {
+        const wrap = document.createElement("div");
         wrap.className = "bd-card-grid";
+        wrap.dataset.bdId = bd.id;
+
+        const coverHtml = bd.cover
+          ? `<img src="${escapeHTML(bd.cover)}" class="bd-cover-img" alt="Couverture">`
+          : `<div class="bd-cover" aria-label="Pas de couverture"></div>`;
+
+        const serie = escapeHTML(bd.series ?? "");
+        const tome = escapeHTML(bd.tome ?? "");
+        const title = escapeHTML(bd.title ?? "");
+
+        const label = (bd.tome && bd.title) ? `${tome} • ${title}` : (bd.tome ? tome : title);
+
         wrap.innerHTML = `
           ${coverHtml}
           <div class="bd-card-title">${serie}</div>
-          ${tomeTitle ? `<div class="author">${tomeTitle}</div>` : ""}
-          
+          ${label ? `<div class="author">${label}</div>` : ""}
         `;
-      }
-
-      /* ===========================
-         MODE LISTE
-      ============================ */
-      else {
-        wrap.className = "bd-card-list";
-        wrap.innerHTML = `
-          ${coverHtml}
-
-          <div class="info">
-            <div class="bd-card-title">${serie}</div>
-            ${tomeTitle ? `<div class="bd-card-title">${tomeTitle}</div>` : ""}
-            <div class="author">${escapeHTML(bd.author ?? "")}</div>
-            <div class="author">${escapeHTML(bd.artist ?? "")}</div>
-            ${editorYear ? `<div class="meta">${editorYear}</div>` : ""}
-          </div>
-
-          
-        `;
-      }
-
-      wrap.onclick = () => openDetailModal(bd);
-      listEl.appendChild(wrap);
-    });
+        wrap.onclick = () => openDetailModal(bd);
+        listEl.appendChild(wrap);
+      });
+    }
   };
 }
-
-/* =========================================================
-   Statistiques
-========================================================= */
-
-function updateStats(items) {
-    const statsArea = byId("statsArea");
-
-    // Stats visibles seulement pour "collec" ou "lu"
-    if (currentFilter !== "collec" && currentFilter !== "lu") {
-        statsArea.classList.add("hidden");
-        return;
-    }
-
-    statsArea.classList.remove("hidden");
-
-    const total = items.length;
-    const read = items.filter(bd => bd.status === "lu").length;
-
-    // Pages (si le champ n’existe pas encore : 0)
-    const pages = items.reduce((sum, bd) => sum + (Number(bd.pages) || 0), 0);
-
-    byId("statTotal").textContent = total;
-    byId("statRead").textContent = read;
-    byId("statPages").textContent = pages;
-}
-
-
 
 /* =========================================================
    DOMContentLoaded
 ========================================================= */
 window.addEventListener("DOMContentLoaded", () => {
-  const viewModeToggle = byId("viewModeToggle");
   const addButton = byId("addButton");
   const modalEl = byId("modal");
-
-  /* Toggle grille/liste */
-  if (viewModeToggle) {
-    viewModeToggle.checked = listMode === "list";
-    viewModeToggle.addEventListener("change", () => {
-      listMode = viewModeToggle.checked ? "list" : "grid";
-      loadBD();
-    });
-  }
+  
+ const groupToggle = byId("groupBySeriesToggle");
+if (groupToggle) {
+  groupBySeries = !!groupToggle.checked;     // synchro initiale si case mémorisée
+  groupToggle.addEventListener("change", () => {
+    groupBySeries = groupToggle.checked;
+    loadBD();                                // on passe par l'unique fonction
+  });
+}
+  
 
   /* CRUD : Delete */
   window.deleteBD = function deleteBD(id) {
@@ -306,7 +299,6 @@ window.addEventListener("DOMContentLoaded", () => {
       byId("authorInput").value = bd.author ?? "";
       byId("artistInput").value = bd.artist ?? "";
       byId("editorInput").value = bd.editor ?? "";
-      byId("pagesInput").value = bd.pages ?? "";
       byId("dateInput").value = bd.date ?? "";
       byId("statusInput").value = bd.status ?? "a_lire";
       importedCoverDataURL = bd.cover ?? "";
@@ -371,7 +363,6 @@ window.addEventListener("DOMContentLoaded", () => {
       editor: byId("editorInput").value,
       date: byId("dateInput").value,
       status: byId("statusInput").value,
-      pages: Number(byId("pagesInput").value),
       cover,
       synopsis: ""  // tu as supprimé le champ, donc vide proprement
     };
@@ -416,7 +407,7 @@ window.addEventListener("DOMContentLoaded", () => {
      Reset Form
   ========================================================= */
   function resetForm() {
-    ["seriesInput","tomeInput","titleInput","authorInput","artistInput","editorInput","dateInput", "pagesInput"]
+    ["seriesInput","tomeInput","titleInput","authorInput","artistInput","editorInput","dateInput"]
       .forEach((id) => {
         const el = byId(id);
         if (el) el.value = "";
@@ -449,3 +440,5 @@ window.addEventListener("DOMContentLoaded", () => {
     collectBtn.classList.add("active");
   }
 });
+
+

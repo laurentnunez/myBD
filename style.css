@@ -88,14 +88,6 @@ a:hover { text-decoration: underline; }
   border-color: transparent;
 }
 
-/* Toggle liste / grille */
-.view-toggle {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 500;
-  font-size: .9rem;
-}
 .switch { position: relative; width: 42px; height: 24px; display: inline-block; }
 .switch input { display: none; }
 .slider {
@@ -166,15 +158,9 @@ a:hover { text-decoration: underline; }
   gap: 6px;
 }
 
-.series-header {
-  width: 100%;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 6px 4px;
-  margin-top: 10px;
-  color: var(--accent);
-  text-transform: uppercase;
-  opacity: 0.9;
+bd-list.grouped {
+  display: block;
+  padding: 6px;
 }
 
 /* MODE GRILLE */
@@ -194,27 +180,8 @@ a:hover { text-decoration: underline; }
 .bd-card-grid:hover { 
   transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,.35); }
 
-/* MODE LISTE */
-.list-mode {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.bd-card-list {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 2px;
-  box-shadow: var(--shadow);
-  display: grid;
-  grid-template-columns: 100px 1fr auto; /* cover / texte / boutons */
-  gap: 6px;
-  align-items: center;
-}
-
-/* Couvertures (grille & liste) */
+/* Couvertures */
 .bd-card-grid img,
-.bd-card-list img,
 .bd-cover-img {
   width: 100%;
   aspect-ratio: var(--cover-ratio);
@@ -610,6 +577,65 @@ display: grid;
 }
 
 
+
+/* ============================================================
+   SERIES GROUP — VERSION MOBILE-FRIENDLY
+============================================================ */
+
+/* Conteneur principal du groupe */
+.series-group {
+    margin: 10px 0 14px;
+    padding: 0 6px;
+}
+
+/* Header du nom de série */
+.series-header {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  margin: 10px 0 8px;
+  color: var(--accent);
+}
+
+.series-header .series-count {
+  color: var(--muted);
+  font-weight: 500;
+  text-transform: none;
+}
+
+
+/* Grille des tomes regroupés */
+.series-grid {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, 1fr); /* mobile par défaut */
+}
+
+/* cartes dans les groupes */
+.series-grid .bd-card-grid {
+    padding: 4px;
+    border-radius: 10px;
+}
+
+/* Ajustements de hauteur sur mobile */
+.series-grid .bd-cover-img,
+.series-grid .bd-cover {
+    aspect-ratio: var(--cover-ratio);
+    width: 100%;
+    object-fit: cover;
+}
+
+/* Quand groupé, on ne force pas la grille parent .grid-mode */
+.bd-list.grouped .bd-card-grid img,
+.bd-list.grouped .bd-cover {
+  aspect-ratio: var(--cover-ratio);
+}
+
+
 /* =========================================================
    RESPONSIVE
 ========================================================= */
@@ -627,4 +653,36 @@ display: grid;
   .grid-mode { grid-template-columns: repeat(2, 1fr); }
   .filter-bar { gap: 6px; }
   #addButton { min-height: 34px; padding: 6px 12px; }
+}
+
+/* ================================================
+   RESPONSIVE BREAKPOINTS
+================================================ */
+
+/* Très petit écran (type iPhone SE, < 360px) */
+@media (max-width: 360px) {
+    .series-grid {
+        grid-template-columns: 1fr; /* 1 colonne */
+    }
+}
+
+/* Smartphones moyens (360–540px) */
+@media (min-width: 360px) and (max-width: 540px) {
+    .series-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+    }
+}
+
+/* Tablettes (≥ 540px) */
+@media (min-width: 540px) {
+    .series-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 colonnes */
+    }
+}
+
+/* Desktop large (≥ 900px) */
+@media (min-width: 900px) {
+    .series-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
 }

@@ -24,6 +24,7 @@ html, body {
   background: var(--bg);
   color: var(--fg);
   font-family: system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  padding-top: 52px;
 }
 .hidden { display: none !important; }
 
@@ -39,12 +40,15 @@ a:hover { text-decoration: underline; }
    ZONE HAUTE STICKY (header + filtres + bouton +)
 ========================================================= */
 .top-area {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  width: 100%;
   z-index: 200000; /* au-dessus du contenu */
   background: linear-gradient(180deg, rgba(14,16,20,0.9) 0%, rgba(14,16,20,0.85) 100%);
   backdrop-filter: saturate(120%) blur(6px);
   box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  padding-bottom: 8px;
 }
 /* Header */
 .app-header {
@@ -669,7 +673,7 @@ display: grid;
 /* Smartphones moyens (360–540px) */
 @media (min-width: 360px) and (max-width: 540px) {
     .series-grid {
-        grid-template-columns: repeat(2, 1fr); /* 2 colonnes */
+        grid-template-columns: repeat(3, 1fr); /* 2 colonnes */
     }
 }
 

@@ -12,6 +12,7 @@
   --gap: 12px;
   --switch-bg: #334155;
   --switch-active: #4de8ba;     /* aligné sur --accent */
+  --bottom-actions-h: 56px;
 }
 
 /* =========================================================
@@ -74,8 +75,20 @@ a:hover { text-decoration: underline; }
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  flex: 1 1 auto;
+  min-width: 0;
   align-items: center;
 }
+
+
+.filters-actions {
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+  flex: 0 0 auto; /* reste compact à droite */
+}
+
+
 .filter-btn {
   padding: 6px 12px;
   background: var(--card);
@@ -156,8 +169,8 @@ a:hover { text-decoration: underline; }
    LISTE — CONTENU
 ========================================================= */
 .bd-list {
-  margin-top: 8px; /* respiration sous la top-area */
-  padding: 6px;
+  margin-top: 2px; /* respiration sous la top-area */
+  padding: 4px;
   display: grid;
   gap: 6px;
 }
@@ -593,7 +606,8 @@ display: grid;
     border: 1px solid var(--border);
     border-radius: 10px;
     box-shadow: var(--shadow);
-    padding: 10px 14px;
+    padding: 10px;
+    justify-content: center;
     margin: 6px;
     display: flex;
     gap: 16px;
@@ -666,6 +680,105 @@ display: grid;
   aspect-ratio: var(--cover-ratio);
 }
 
+/* ============================
+   BARRE FIXE EN BAS (mobile)
+   ============================ */
+.bottom-actions {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: none;                /* affichée uniquement sur mobile (voir media query) */
+  height: var(--bottom-actions-h);
+  gap: 8px;
+  padding: 10px max(12px, env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-right));
+
+  background: linear-gradient(180deg, rgba(14,16,20,0.88) 0%, rgba(14,16,20,0.94) 100%);
+  backdrop-filter: saturate(120%) blur(6px);
+  box-shadow: 0 -6px 16px rgba(0,0,0,0.45);
+
+  z-index: 250000;              /* au-dessus du contenu, en-dessous des modales (300000+) */
+  justify-content: center;
+}
+
+/* Boutons dans la barre */
+.bottom-actions .btn {
+  background: var(--card);
+  border: 1px solid var(--border);
+}
+
+/* Espace de respiration en bas du contenu pour éviter le chevauchement */
+body.has-bottom-actions {
+  padding-bottom: calc(var(--bottom-actions-h) + 12px + env(safe-area-inset-bottom));
+}
+
+/* Affichage mobile : on montre la barre fixe et on masque les boutons du header */
+@media (max-width: 640px) {
+  .bottom-actions { display: flex; }
+
+  /* Masquer les boutons Export/Import en haut pour désencombrer l'en-tête */
+  .filters-actions #exportButton,
+  .filters-actions #importButton,
+  .filters-actions #importInput {
+    display: none !important;
+  }
+
+  /* Ajuster l'espace réservé sous le contenu selon la hauteur du viewport */
+  body.has-bottom-actions {
+    padding-bottom: calc(60px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Mini-menu pour Sauvegarde */
+.save-menu {
+  position: absolute;
+  bottom: calc(100% + 6px); /* juste au-dessus de la barre fixe */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  background: rgba(20, 22, 28, 0.94);
+  backdrop-filter: blur(6px) saturate(120%);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.45);
+  z-index: 300000; /* sous les modales mais au-dessus du bas */
+}
+
+.save-menu.hidden {
+  display: none;
+}
+
+.save-menu .btn.small {
+  font-size: 1rem;
+  padding: 10px 18px;
+  text-align: center;  /* ← centrage du texte */
+  border-radius: 10px;
+
+  white-space: nowrap;
+}
+
+/* Positionnement relatif pour la zone bottom-actions */
+.bottom-actions {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  /* On ajoute position:relative pour ancrer le mini-menu */
+  position: fixed;
+}
+
+.bottom-actions #saveMenuButton {
+  position: relative;
+}
+
 
 /* =========================================================
    RESPONSIVE
@@ -679,10 +792,16 @@ display: grid;
 @media (max-width: 520px) {
   .grid-mode { grid-template-columns: repeat(3, 1fr); }
   .app-header h1 { font-size: 1.05rem; }
+  #bdList {padding-bottom: calc(var(--bottom-actions-h) + 12px + env(safe-area-inset-bottom));}
+
 }
 @media (max-width: 360px) {
   .grid-mode { grid-template-columns: repeat(2, 1fr); }
   .filter-bar { gap: 6px; }
+  
+.filters-actions .btn {
+    padding: 6px 10px;
+  }
   #addButton { min-height: 34px; padding: 6px 12px; }
   #pagesInput { width: clamp(56px, 24vw, 84px);
   .series-grid { grid-template-columns: 1fr; /* 1 colonne */

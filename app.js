@@ -265,7 +265,6 @@ function loadBD() {
   };
 }
 
-
 // =========================================================
 // STATISTIQUES (total collection par défaut)
 // =========================================================
@@ -318,6 +317,69 @@ async function updateStats({ scope = "all" } = {}) {
   });
 }
 
+// =========================================================
+// EXPORT : IndexedDB -> JSON -> Téléchargement
+// =========================================================
+function exportCollection() {
+  const tx = db.transaction("bd", "readonly");
+  const store = tx.objectStore("bd");
+  const req = store.getAll();
+
+  req.onsuccess = () => {
+    const data = req.result ?? [];
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    const date = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = `mybooks_backup_${date}.json`;
+    a.click();
+
+    URL.revokeObjectURL(url);
+    showToast?.("Export effectué !");
+  };
+  req.onerror = () => showToast?.("Erreur export.", "error");
+}
+
+// =========================================================
+// IMPORT : Fichier JSON -> réinjection dans IndexedDB
+// =========================================================
+function importCollectionFromFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const imported = JSON.parse(reader.result);
+      if (!Array.isArray(imported)) {
+        showToast?.("Fichier invalide.", "error");
+        return;
+      }
+
+      const tx = db.transaction("bd", "readwrite");
+      const store = tx.objectStore("bd");
+
+      // 1) On efface l’existant
+      const clearReq = store.clear();
+      clearReq.onsuccess = () => {
+        // 2) On réinsère les éléments importés tels quels (avec leurs id)
+        imported.forEach(item => store.put(item));
+      };
+
+      tx.oncomplete = () => {
+        loadBD();                       // rafraîchit l’UI
+        showToast?.("Import réussi !");
+      };
+      tx.onerror = () => showToast?.("Erreur import.", "error");
+
+    } catch (e) {
+      console.error(e);
+      showToast?.("Erreur de lecture du fichier.", "error");
+    }
+  };
+  reader.readAsText(file);
+}
+
+
 // Petit helper pour éviter les nulls
 function setTextSafe(id, val) {
   const el = byId(id);
@@ -331,6 +393,59 @@ window.addEventListener("DOMContentLoaded", () => {
   const addButton = byId("addButton");
   const modalEl = byId("modal");
   
+ //Activer l'espace de sécurité sous le contenu si la barre fixe existe (mobile)
+  if (window.matchMedia("(max-width: 640px)").matches && byId("bottomActions")) {
+    document.body.classList.add("has-bottom-actions");
+  }
+
+  // === Mini-menu Sauvegarde (affiche Export / Import) ===
+const saveMenuButton = byId("saveMenuButton");
+const saveMenu = byId("saveMenu");
+
+if (saveMenuButton && saveMenu) {
+  saveMenuButton.addEventListener("click", () => {
+    saveMenu.classList.toggle("hidden");
+  });
+
+  // Clic hors menu → fermer
+  document.addEventListener("click", (e) => {
+    if (!saveMenu.contains(e.target) && e.target !== saveMenuButton) {
+      saveMenu.classList.add("hidden");
+    }
+  });
+}
+
+
+// =============================
+// EXPORT
+// =============================
+const exportBtn = byId("exportButton");
+if (exportBtn) {
+  exportBtn.addEventListener("click", () => {
+    exportCollection();
+  });
+}
+
+// =============================
+// IMPORT (bouton -> input:file)
+// =============================
+const importBtn = byId("importButton");
+const importInput = byId("importInput");
+
+if (importBtn && importInput) {
+  importBtn.addEventListener("click", () => {
+    importInput.click();
+  });
+
+  importInput.addEventListener("change", () => {
+    const file = importInput.files?.[0];
+    if (!file) return;
+    importCollectionFromFile(file);
+    // on remet l'input à zéro pour pouvoir re-sélectionner le même fichier plus tard
+    importInput.value = "";
+  });
+}
+
  const groupToggle = byId("groupBySeriesToggle");
 if (groupToggle) {
   groupBySeries = !!groupToggle.checked;     // synchro initiale si case mémorisée

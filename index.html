@@ -17,6 +17,20 @@
   <div id="toastRoot" aria-live="polite" aria-atomic="true"></div>
   <!-- JS -->
   <script src="app.js"></script>
+  <!-- Barre d'actions fixe (mobile) -->
+<div id="bottomActions" class="bottom-actions" aria-label="Actions d'export/import">
+  
+<button id="saveMenuButton" class="btn">Sauvegarde</button>
+
+<!-- Mini-menu déroulant -->
+<div id="saveMenu" class="save-menu hidden">
+    <button id="exportButton" class="btn small">Exporter</button>
+    <input type="file" id="importInput" accept=".json" class="hidden" />
+    <button id="importButton" class="btn small">Importer</button>
+</div>
+
+</div>
+
 </body>
 </html>
 
@@ -48,10 +62,13 @@
       <!--<button class="filter-btn" data-filter="a_vendre">À vendre</button> -->
       <button class="filter-btn" data-filter="wishlist">Wishlist</button>
     
-       
-    
     </div>
-    <button id="addButton" class="btn primary add-floating" aria-label="Ajouter une BD">+</button>
+    <div class="filters-actions">
+      <button id="exportButton" class="btn">Exporter</button>
+        <input type="file" id="importInput" accept=".json" class="hidden" />
+        <button id="importButton" class="btn">Importer</button>
+      <button id="addButton" class="btn primary add-floating" aria-label="Ajouter une BD">+</button>
+    </div>
   </section>
   
 </div>

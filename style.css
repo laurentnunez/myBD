@@ -195,7 +195,7 @@ bd-list.grouped {
   transition: transform .08s ease, box-shadow .2s ease;
 }
 .bd-card-grid:hover { 
-  transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,.35); }
+ filter: brightness(1.07); }
 
 /* Couvertures */
 .bd-card-grid img,

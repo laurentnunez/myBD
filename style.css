@@ -786,7 +786,7 @@ body.has-bottom-actions {
 
 /* Desktop large (≥ 900px) */
 @media (min-width: 900px) {
-    .series-grid {grid-template-columns: repeat(4, 1fr);
+    .series-grid {grid-template-columns: repeat(6, 1fr);
     }
 }
 
@@ -796,7 +796,7 @@ body.has-bottom-actions {
 
 /* Tablettes (≥ 540px) */
 @media (min-width: 540px) {
-    .series-grid { grid-template-columns: repeat(3, 1fr); /* 3 colonnes */
+    .series-grid { grid-template-columns: repeat(5, 1fr); /* 3 colonnes */
     }
 }
 

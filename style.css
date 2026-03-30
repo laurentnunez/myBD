@@ -701,7 +701,7 @@ display: grid;
 
 /* Conteneur principal du groupe */
 .series-group {
-    margin: 10px 0 14px;
+    margin: 4px 0 4px;
     padding: 0 6px;
 }
 
@@ -712,7 +712,7 @@ display: grid;
   gap: 4px;
   font-weight: 700;
   font-size: 0.95rem;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: .3px;
   margin: 10px 0 8px;
   color: var(--accent);

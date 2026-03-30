@@ -216,7 +216,7 @@ bd-list.grouped {
   background:
     linear-gradient(135deg, rgba(77,232,206,0.08), rgba(77,232,206,0.02)),
     #0f141a;
-  border: 1px solid var(--accent);
+  border: 1px solid var(--muted);
   display: grid;
   place-items: center;
   color: var(--muted);

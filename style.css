@@ -569,14 +569,34 @@ display: grid;
 
 .detail-title-line {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
+    align-items: baseline;
     justify-content: center;
     gap: 8px;
 }
 
 .tome-chip {
-    font-size: .9rem;
-    padding: 3px 8px;
+       
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    font-size: 1.2rem !important;
+    line-height: 1.2;
+    font-weight: 600;
+    color: var(--accent); /* dégradé dans la logique série/titre */
+
+}
+
+
+.detail-title-line .tome-chip::after {
+    content: "";
+}
+
+.detail-title-line .detail-title:not(:empty)::before {
+    content: "· ";
+    margin: 0 6px;
+    font-weight: 600;
+    opacity: 0.8;
 }
 
 

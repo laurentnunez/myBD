@@ -37,6 +37,18 @@ a:hover { text-decoration: underline; }
   outline-offset: 2px;
 }
 
+.color-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 6px 12px;
+}
+
+.color-controls label {
+    font-size: .8rem;
+    color: var(--fg);
+}
+
 /* =========================================================
    ZONE HAUTE STICKY (header + filtres + bouton +)
 ========================================================= */

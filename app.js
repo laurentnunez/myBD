@@ -426,8 +426,8 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   // === Mini-menu Sauvegarde (affiche Export / Import) ===
-const saveMenuButton = byId("saveMenuButton");
-const saveMenu = byId("saveMenu");
+    const saveMenuButton = byId("saveMenuButton");
+    const saveMenu = byId("saveMenu");
 
 if (saveMenuButton && saveMenu) {
   saveMenuButton.addEventListener("click", () => {
@@ -476,17 +476,17 @@ if (importBtn && importInput) {
     importCollectionFromFile(file);
     // on remet l'input à zéro pour pouvoir re-sélectionner le même fichier plus tard
     importInput.value = "";
-  });
-}
+    });
+  }
 
  const groupToggle = byId("groupBySeriesToggle");
-if (groupToggle) {
-  groupBySeries = !!groupToggle.checked;     // synchro initiale si case mémorisée
-  groupToggle.addEventListener("change", () => {
-    groupBySeries = groupToggle.checked;
-    loadBD();                                // on passe par l'unique fonction
-  });
-}
+  if (groupToggle) {
+    groupBySeries = !!groupToggle.checked;     // synchro initiale si case mémorisée
+    groupToggle.addEventListener("change", () => {
+      groupBySeries = groupToggle.checked;
+      loadBD();                                // on passe par l'unique fonction
+    });
+  }
 
  byId("pagesInput").addEventListener("input", () => {
         const el = byId("pagesInput");
@@ -659,6 +659,30 @@ if (groupToggle) {
     );
     collectBtn.classList.add("active");
   }
+
+ // ===========================
+// BOUTON POUR CHANGER L'ACCENT
+// ===========================
+const accentBtn = document.getElementById("accentButton");
+const accentPicker = document.getElementById("accentPicker");
+
+// Charger un accent sauvegardé
+const savedAccent = localStorage.getItem("accent-color");
+if (savedAccent) {
+    document.documentElement.style.setProperty("--accent", savedAccent);
+    accentPicker.value = savedAccent;
+}
+
+// Clic sur le bouton → ouvrir le color picker
+accentBtn.addEventListener("click", () => accentPicker.click());
+
+// Changement de couleur
+accentPicker.addEventListener("input", () => {
+    const color = accentPicker.value;
+    document.documentElement.style.setProperty("--accent", color);
+    localStorage.setItem("accent-color", color);
+});
+
 });
 
 /* =========================================================

@@ -121,7 +121,7 @@ function openDetailModal(bd) {
       detailTomeValue.textContent = "Récit Complet";
   } 
   else {
-      detailTomeValue.textContent = bd.tome;
+      detailTomeValue.textContent = "Tome " + bd.tome;
   }
 
 

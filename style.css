@@ -41,7 +41,7 @@ a:hover { text-decoration: underline; }
     display: flex;
     gap: 12px;
     align-items: center;
-    padding: 6px 12px;
+    padding: 4px;
 }
 
 .color-controls label {
@@ -161,7 +161,7 @@ a:hover { text-decoration: underline; }
    BOUTONS (générique)
 ========================================================= */
 .btn {
-  padding: 8px 12px;
+  padding: 10px;
   border-radius: 8px;
   background: var(--card);
   color: var(--fg);
@@ -169,6 +169,10 @@ a:hover { text-decoration: underline; }
   cursor: pointer;
   transition: .15s;
   box-shadow: var(--shadow);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
 }
 .btn.primary {
   background: var(--accent);
@@ -489,6 +493,30 @@ display: grid;
     margin-bottom: 1px;
 }
 
+
+.icon-btn {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    margin-right: 6px;
+    filter: brightness(1.2);
+    fill: var(--accent);
+}
+
+.icon-delete,.icon-close,.icon-edit, .icon-accent {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    fill: currentColor;
+}
+
+#detailDelete, #saveButton, #cancelButton, #detailClose , #detailEdit , #accentButton , #resetAccentButton ,#saveMenuButton {
+    color: var(--accent);
+}
+
+#saveMenuButton svg {
+    pointer-events: none;
+}
 
 
 /* =============================

@@ -23,15 +23,34 @@
 
   <!-- Barre d'actions fixe (mobile) -->
   <div id="bottomActions" class="bottom-actions" aria-label="Actions d'export/import">
-    <button id="saveMenuButton" class="btn">Sauvegarde</button>
+    <button id="saveMenuButton" class="btn">
+          <svg viewBox="0 0 32 32" class="icon-close">
+              <path d="M26,29H6a3,3,0,0,1-3-3V6A3,3,0,0,1,6,3H20.26a3,3,0,0,1,1.95.72L28,8.64A3,3,0,0,1,29,10.92V26A3,3,0,0,1,26,29ZM6,5A1,1,0,0,0,5,6V26a1,1,0,0,0,1,1H26a1,1,0,0,0,1-1V10.92a1,1,0,0,0-.35-.76L20.91,5.24A1,1,0,0,0,20.26,5Z" fill="currentColor"/>
+              <path d="M18,10H10A2,2,0,0,1,8,8V4A1,1,0,0,1,9,3H19a1,1,0,0,1,1,1V8A2,2,0,0,1,18,10ZM10,5V8h8V5Z" fill="currentColor"/>
+              <path d="M23,29H9a1,1,0,0,1-1-1V17a2,2,0,0,1,2-2H22a2,2,0,0,1,2,2V28A1,1,0,0,1,23,29ZM10,27H22V17H10Z" fill="currentColor"/>
+            </svg>
+    </button>
 
     
-<div class="color-controls">
-    <button id="accentButton" class="btn">🎨</button>
-    <button id="resetAccentButton" class="btn">♻️</button>
-    <input type="color" id="accentPicker" class="hidden">
-</div>
-
+    <div class="color-controls">
+      <button id="accentButton" class="btn">
+            <svg viewBox="0 0 32 32" class="icon-close">
+                <path d="M16.54,2A14,14,0,0,0,2,16a4.82,4.82,0,0,0,6.09,4.65l1.12-.31A3,3,0,0,1,13,23.24V27a3,3,0,0,0,3,3A14,14,0,0,0,30,15.46,14.05,14.05,0,0,0,16.54,2Zm8.11,22.31A11.93,11.93,0,0,1,16,28a1,1,0,0,1-1-1V23.24a5,5,0,0,0-5-5,5.07,5.07,0,0,0-1.33.18l-1.12.31A2.82,2.82,0,0,1,4,16,12,12,0,0,1,16.47,4,12.18,12.18,0,0,1,28,15.53,11.89,11.89,0,0,1,24.65,24.32Z" fill="currentColor"/>
+                <circle cx="10" cy="12" r="2"/>
+                <circle cx="16" cy="9" r="2"/>
+                <circle cx="22" cy="12" r="2"/>
+                <circle cx="23" cy="18" r="2"/>
+                <circle cx="19" cy="23" r="2"/>
+              </svg>
+      </button>
+      
+      <button id="resetAccentButton" class="btn">
+            <svg viewBox="0 0 32 32" class="icon-close">
+                <path d="M20.852,6.744c3.074,1.756 5.15,5.126 5.15,8.986c0,5.664 -4.474,10.275 -10,10.275c-5.526,0 -10,-4.611 -10,-10.275c0,-4.566 2.906,-8.446 6.93,-9.781c0.524,-0.174 0.808,-0.74 0.635,-1.264c-0.174,-0.524 -0.74,-0.808 -1.264,-0.634c-4.81,1.595 -8.301,6.221 -8.301,11.679c0,6.782 5.384,12.275 12,12.275c6.616,0 12,-5.493 12,-12.275c0,-4.431 -2.3,-8.314 -5.74,-10.472l1.211,-0.324c0.533,-0.143 0.85,-0.692 0.707,-1.225c-0.143,-0.533 -0.691,-0.85 -1.224,-0.707l-3.864,1.035c-0.534,0.143 -0.85,0.692 -0.707,1.225l1.035,3.864c0.143,0.533 0.692,0.85 1.225,0.707c0.533,-0.143 0.85,-0.692 0.707,-1.225l-0.5,-1.864Z" fill="currentColor"/>
+              </svg>
+      </button>
+      <input type="color" id="accentPicker" class="hidden">
+    </div>
 
     <!-- Mini-menu déroulant -->
     <div id="saveMenu" class="save-menu hidden">
@@ -121,8 +140,20 @@
       </div>
 
       <div class="modal-actions">
-        <button id="saveButton" class="btn primary">Enregistrer</button>
-        <button id="cancelButton" class="btn">Annuler</button>
+        <button id="saveButton" class="btn">
+          <svg viewBox="0 0 32 32" class="icon-close">
+              <path d="M26,29H6a3,3,0,0,1-3-3V6A3,3,0,0,1,6,3H20.26a3,3,0,0,1,1.95.72L28,8.64A3,3,0,0,1,29,10.92V26A3,3,0,0,1,26,29ZM6,5A1,1,0,0,0,5,6V26a1,1,0,0,0,1,1H26a1,1,0,0,0,1-1V10.92a1,1,0,0,0-.35-.76L20.91,5.24A1,1,0,0,0,20.26,5Z" fill="currentColor"/>
+              <path d="M18,10H10A2,2,0,0,1,8,8V4A1,1,0,0,1,9,3H19a1,1,0,0,1,1,1V8A2,2,0,0,1,18,10ZM10,5V8h8V5Z" fill="currentColor"/>
+              <path d="M23,29H9a1,1,0,0,1-1-1V17a2,2,0,0,1,2-2H22a2,2,0,0,1,2,2V28A1,1,0,0,1,23,29ZM10,27H22V17H10Z" fill="currentColor"/>
+            </svg>
+        </button>
+        <button id="cancelButton" class="btn">
+          <svg viewBox="0 0 32 32" class="icon-close">
+              <path d="M16,29A13,13,0,1,1,29,16,13,13,0,0,1,16,29ZM16,5A11,11,0,1,0,27,16,11,11,0,0,0,16,5Z" fill="currentColor"/>
+              <path d="M11.76,21.24a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.41l8.49-8.49A1,1,0,0,1,21,12.46L12.46,21A1,1,0,0,1,11.76,21.24Z" fill="currentColor"/>
+              <path d="M20.24,21.24a1,1,0,0,1-.7-.29l-8.49-8.49a1,1,0,0,1,1.41-1.41L21,19.54A1,1,0,0,1,21,21,1,1,0,0,1,20.24,21.24Z" fill="currentColor"/>
+            </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -163,9 +194,29 @@
       </div>
 
       <div class="modal-actions">
-        <button id="detailEdit" class="btn">✏️ Modifier</button>
-        <button id="detailDelete" class="btn">🗑️ Supprimer</button>
-        <button id="detailClose" class="btn primary">Fermer</button>
+        <button id="detailEdit" class="btn">
+          <svg viewBox="0 0 24 24" class="icon-edit">
+              <path d="M21.707,5.565,18.435,2.293a1,1,0,0,0-1.414,0L3.93,15.384a.991.991,0,0,0-.242.39l-1.636,4.91A1,1,0,0,0,3,22a.987.987,0,0,0,.316-.052l4.91-1.636a.991.991,0,0,0,.39-.242L21.707,6.979A1,1,0,0,0,21.707,5.565ZM7.369,18.489l-2.788.93.93-2.788,8.943-8.944,1.859,1.859ZM17.728,8.132l-1.86-1.86,1.86-1.858,1.858,1.858Z" fill="currentColor"/>
+          </svg>
+        </button>
+
+          
+      <button id="detailDelete" class="btn">
+          <svg viewBox="0 0 448 512" class="icon-delete">
+              <path d="M374.845,112V80c0-20.872-14.845-48-46.845-48H184c-32,0-45.855,16-45.855,48v32H56v48h32v272c0,32,18.145,48,50.145,48
+              H376c32,0,48-16,48-48V160h32v-48H374.845z M184,80h144v32H184V80z M376,432H138.145V160H376V432z" fill="currentColor"/>
+          </svg>
+      </button>
+
+
+        <button id="detailClose" class="btn">
+          <svg viewBox="0 0 32 32" class="icon-close">
+              <path d="M16,29A13,13,0,1,1,29,16,13,13,0,0,1,16,29ZM16,5A11,11,0,1,0,27,16,11,11,0,0,0,16,5Z" fill="currentColor"/>
+              <path d="M11.76,21.24a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.41l8.49-8.49A1,1,0,0,1,21,12.46L12.46,21A1,1,0,0,1,11.76,21.24Z" fill="currentColor"/>
+              <path d="M20.24,21.24a1,1,0,0,1-.7-.29l-8.49-8.49a1,1,0,0,1,1.41-1.41L21,19.54A1,1,0,0,1,21,21,1,1,0,0,1,20.24,21.24Z" fill="currentColor"/>
+            </svg>
+        </button>
+
       </div>
     </div>
   </div>

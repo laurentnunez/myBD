@@ -102,7 +102,7 @@ function showToast(message, type = "success") {
   el.offsetHeight;
   el.classList.add("show");
 
-  setTimeout(() => el.remove(), 2600);
+  setTimeout(() => el.remove(), 5000);
 }
 
 /* =========================================================

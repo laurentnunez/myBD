@@ -777,39 +777,37 @@ async function openScanner() {
 
   async function handleCodeFound(isbn) {
     showToast("Code détecté : " + isbn);
-
     try {
-      const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
-      const json = await res.json();
+        const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+        const json = await res.json();
 
-      if (!json.items || json.items.length === 0) {
-        showToast("BD introuvable dans Google Books", "error");
-        return;
-      }
+        if (!json.items || json.items.length === 0) {
+            showToast("BD introuvable dans Google Books", "error");
+            return;
+        }
 
-      const book = json.items[0].volumeInfo;
+        const book = json.items[0].volumeInfo;
 
-      // Remplir les champs
-      byId("seriesInput").value = book.subtitle || book.title || "";
-      byId("titleInput").value = book.title || "";
-      byId("authorInput").value = (book.authors || []).join(", ");
-      byId("editorInput").value = book.publisher || "";
-      byId("dateInput").value = book.publishedDate || "";
-      byId("pagesInput").value = book.pageCount || "";
+        openModal(); // ✅ ouvrir d'abord
 
-      if (book.imageLinks?.thumbnail) {
-        const img = await fetch(book.imageLinks.thumbnail); 
-        const blob = await img.blob();
-        const file = new File([blob], "cover.jpg", { type: blob.type });
-        importedCoverDataURL = await toBase64(file);
-      }
+        byId("seriesInput").value  = book.subtitle || book.title || "";
+        byId("titleInput").value   = book.title || "";
+        byId("authorInput").value  = (book.authors || []).join(", ");
+        byId("editorInput").value  = book.publisher || "";
+        byId("dateInput").value    = book.publishedDate || "";
+        byId("pagesInput").value   = book.pageCount || "";
 
-      showToast("Données pré-remplies !");
-      openModal();
+        if (book.imageLinks?.thumbnail) {
+            const img = await fetch(book.imageLinks.thumbnail);
+            const blob = await img.blob();
+            const file = new File([blob], "cover.jpg", { type: blob.type });
+            importedCoverDataURL = await toBase64(file);
+        }
 
+        showToast("Données pré-remplies !");
     } catch (e) {
-      showToast("Erreur lors de la récupération des données", "error");
+        showToast("Erreur lors de la récupération des données", "error");
     }
-  }
+}
 
 

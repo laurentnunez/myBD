@@ -446,6 +446,13 @@ if (saveMenuButton && saveMenu) {
       closeScanner();
   });
 
+  const scanBtn = byId("scanButton");
+  if (scanBtn) {
+      scanBtn.addEventListener("click", () => {
+          openScanner();
+      });
+  }
+
 // =============================
 // EXPORT
 // =============================
@@ -717,15 +724,6 @@ function formatTomeLabel(tome) {
     if (tome === 0 || tome === "0") return "Récit complet";
     return `Tome ${tome}`;
   }
-
-  const scanBtn = byId("scanButton");
-  if (scanBtn) {
-      scanBtn.addEventListener("click", () => {
-          openScanner();
-      });
-  }
-
-
 
 const canScan = ('BarcodeDetector' in window);
 async function openScanner() {

@@ -94,6 +94,8 @@
         <button id="importButton" class="btn">Importer</button>
 
         <button id="addButton" class="btn primary add-floating" aria-label="Ajouter une BD">+</button>
+
+        <button id="scanButton" class="btn primary">📷</button>
       </div>
     </section>
   </div>
@@ -217,6 +219,18 @@
             </svg>
         </button>
 
+      </div>
+    </div>
+  </div>
+
+  <!-- Modale de scan -->
+  <div id="scanModal" class="modal hidden">
+    <div class="modal-content" style="max-width:400px">
+      <h2>Scanner un code-barres</h2>
+      <video id="scanVideo" autoplay playsinline style="width:100%; border-radius:10px;"></video>
+
+      <div class="modal-actions">
+        <button id="scanClose" class="btn">Fermer</button>
       </div>
     </div>
   </div>

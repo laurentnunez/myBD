@@ -440,8 +440,11 @@ if (saveMenuButton && saveMenu) {
       saveMenu.classList.add("hidden");
     }
   });
-}
+  }
 
+  byId("scanClose").addEventListener("click", () => {
+      closeScanner();
+  });
 
 // =============================
 // EXPORT
@@ -711,7 +714,102 @@ resetAccentBtn.addEventListener("click", () => {
      Fonction pour remplacer "Tome 0" par "Récit complet"
   ========================================================= */
 function formatTomeLabel(tome) {
-  if (tome === 0 || tome === "0") return "Récit complet";
-  return `Tome ${tome}`;
+    if (tome === 0 || tome === "0") return "Récit complet";
+    return `Tome ${tome}`;
+  }
+
+  const scanBtn = byId("scanButton");
+  if (scanBtn) {
+      scanBtn.addEventListener("click", () => {
+          openScanner();
+      });
+  }
+
+
+
+const canScan = ('BarcodeDetector' in window);
+async function openScanner() {
+  if (!canScan) {
+    showToast("Scanning non supporté sur cet appareil.", "error");
+    return;
+  }
+
+  const scanModal = byId("scanModal");
+  const video = byId("scanVideo");
+
+  scanModal.classList.remove("hidden");
+
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: "environment" } // caméra arrière
+  });
+
+  video.srcObject = stream;
+
+  const detector = new BarcodeDetector({
+    formats: ["ean_13", "ean_8", "code_128"]
+  });
+
+  const scanLoop = async () => {
+    if (scanModal.classList.contains("hidden")) return;
+    try {
+      const barcodes = await detector.detect(video);
+      if (barcodes.length > 0) {
+        const code = barcodes[0].rawValue;
+        handleCodeFound(code);
+        closeScanner();
+        return;
+      }
+    } catch (e) {}
+    requestAnimationFrame(scanLoop);
+  };
+
+  scanLoop();
 }
+
+  function closeScanner() {
+    const scanModal = byId("scanModal");
+    scanModal.classList.add("hidden");
+
+    const video = byId("scanVideo");
+    if (video.srcObject) {
+      video.srcObject.getTracks().forEach(t => t.stop());
+    }
+  }
+
+  async function handleCodeFound(isbn) {
+    showToast("Code détecté : " + isbn);
+
+    try {
+      const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+      const json = await res.json();
+
+      if (!json.items || json.items.length === 0) {
+        showToast("BD introuvable dans Google Books", "error");
+        return;
+      }
+
+      const book = json.items[0].volumeInfo;
+
+      // Remplir les champs
+      byId("seriesInput").value = book.subtitle || book.title || "";
+      byId("titleInput").value = book.title || "";
+      byId("authorInput").value = (book.authors || []).join(", ");
+      byId("editorInput").value = book.publisher || "";
+      byId("dateInput").value = book.publishedDate || "";
+      byId("pagesInput").value = book.pageCount || "";
+
+      if (book.imageLinks?.thumbnail) {
+        const blob = await img.blob();
+        const file = new File([blob], "cover.jpg", { type: blob.type });
+        importedCoverDataURL = await toBase64(file);
+      }
+
+      showToast("Données pré-remplies !");
+      openModal();
+
+    } catch (e) {
+      showToast("Erreur lors de la récupération des données", "error");
+    }
+  }
+
 

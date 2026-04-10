@@ -799,6 +799,7 @@ async function openScanner() {
       byId("pagesInput").value = book.pageCount || "";
 
       if (book.imageLinks?.thumbnail) {
+        const img = await fetch(book.imageLinks.thumbnail); 
         const blob = await img.blob();
         const file = new File([blob], "cover.jpg", { type: blob.type });
         importedCoverDataURL = await toBase64(file);

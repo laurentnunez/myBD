@@ -315,6 +315,12 @@ display: grid;
   border: 1px solid var(--border);
 }
 
+
+#scanModal {
+    z-index: 300002;
+}
+
+
 .titleTome {
   display: flex;
   gap: 4px;

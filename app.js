@@ -775,27 +775,35 @@ async function openScanner() {
     }
   }
 
-  async function handleCodeFound(isbn) {
+async function handleCodeFound(isbn) {
     showToast("Code détecté : " + isbn);
+
     try {
-        const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+        const url = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`;
+        const res = await fetch(url);
+
+        if (!res.ok) {
+            showToast("Google Books ne répond pas (" + res.status + ")", "error");
+            return;
+        }
+
         const json = await res.json();
 
         if (!json.items || json.items.length === 0) {
-            showToast("BD introuvable dans Google Books", "error");
+            showToast("Aucune donnée trouvée pour cet ISBN", "error");
             return;
         }
 
         const book = json.items[0].volumeInfo;
 
-        openModal(); // ✅ ouvrir d'abord
+        openModal();
 
-        byId("seriesInput").value  = book.subtitle || book.title || "";
-        byId("titleInput").value   = book.title || "";
-        byId("authorInput").value  = (book.authors || []).join(", ");
-        byId("editorInput").value  = book.publisher || "";
-        byId("dateInput").value    = book.publishedDate || "";
-        byId("pagesInput").value   = book.pageCount || "";
+        byId("seriesInput").value = book.subtitle || book.title || "";
+        byId("titleInput").value = book.title || "";
+        byId("authorInput").value = (book.authors || []).join(", ");
+        byId("editorInput").value = book.publisher || "";
+        byId("dateInput").value = book.publishedDate || "";
+        byId("pagesInput").value = book.pageCount || "";
 
         if (book.imageLinks?.thumbnail) {
             const img = await fetch(book.imageLinks.thumbnail);
@@ -805,8 +813,10 @@ async function openScanner() {
         }
 
         showToast("Données pré-remplies !");
-    } catch (e) {
-        showToast("Erreur lors de la récupération des données", "error");
+    } 
+    catch (e) {
+        console.error("ERREUR FETCH :", e);
+        showToast("Impossible de récupérer les infos ISBN", "error");
     }
 }
 

@@ -315,11 +315,15 @@ display: grid;
   border: 1px solid var(--border);
 }
 
-
-#scanModal {
-    z-index: 300002;
+.isbn-row {
+  display: flex;
+  gap: 10px;
+  grid-column: 1 / -1;
 }
 
+#isbnInput {
+  flex: 1;
+}
 
 .titleTome {
   display: flex;

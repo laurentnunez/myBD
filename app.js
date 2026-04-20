@@ -425,11 +425,28 @@ window.addEventListener("DOMContentLoaded", () => {
     document.body.classList.add("has-bottom-actions");
   }
 
+ //Fonction pour l'ISBN
+
+const isbnBtn = byId("isbnFetchButton");
+const isbnInput = byId("isbnInput");
+
+if (isbnBtn && isbnInput) {
+  isbnBtn.addEventListener("click", () => {
+    const isbn = isbnInput.value.replace(/[^0-9X]/gi, "").trim();
+    if (!isbn) {
+      showToast("Veuillez entrer un ISBN valide", "error");
+      return;
+    }
+    handleCodeFound(isbn);
+  });
+}
+
+
   // === Mini-menu Sauvegarde (affiche Export / Import) ===
     const saveMenuButton = byId("saveMenuButton");
     const saveMenu = byId("saveMenu");
 
-if (saveMenuButton && saveMenu) {
+  if (saveMenuButton && saveMenu) {
   saveMenuButton.addEventListener("click", () => {
     saveMenu.classList.toggle("hidden");
   });
@@ -442,16 +459,7 @@ if (saveMenuButton && saveMenu) {
   });
   }
 
-  byId("scanClose").addEventListener("click", () => {
-      closeScanner();
-  });
-
-  const scanBtn = byId("scanButton");
-  if (scanBtn) {
-      scanBtn.addEventListener("click", () => {
-          openScanner();
-      });
-  }
+ 
 
 // =============================
 // EXPORT
@@ -645,6 +653,7 @@ if (importBtn && importInput) {
 
     byId("statusInput").value = "a_lire";
     byId("coverInput").value = "";
+    byId("isbnInput").value = "";
     importedCoverDataURL = "";
   }
 
@@ -725,55 +734,7 @@ function formatTomeLabel(tome) {
     return `Tome ${tome}`;
   }
 
-const canScan = ('BarcodeDetector' in window);
-async function openScanner() {
-  if (!canScan) {
-    showToast("Scanning non supporté sur cet appareil.", "error");
-    return;
-  }
 
-  const scanModal = byId("scanModal");
-  const video = byId("scanVideo");
-
-  scanModal.classList.remove("hidden");
-
-  const stream = await navigator.mediaDevices.getUserMedia({
-    video: { facingMode: "environment" } // caméra arrière
-  });
-
-  video.srcObject = stream;
-  await video.play();
-
-  const detector = new BarcodeDetector({
-    formats: ["ean_13", "ean_8", "code_128"]
-  });
-
-  const scanLoop = async () => {
-    if (scanModal.classList.contains("hidden")) return;
-    try {
-      const barcodes = await detector.detect(video);
-      if (barcodes.length > 0) {
-        const code = barcodes[0].rawValue;
-        handleCodeFound(code);
-        closeScanner();
-        return;
-      }
-    } catch (e) {}
-    requestAnimationFrame(scanLoop);
-  };
-
-  scanLoop();
-}
-
-  function closeScanner() {
-    const scanModal = byId("scanModal");
-    scanModal.classList.add("hidden");
-
-    const video = byId("scanVideo");
-    if (video.srcObject) {
-      video.srcObject.getTracks().forEach(t => t.stop());
-    }
-  }
 
 async function handleCodeFound(isbn) {
     showToast("Code détecté : " + isbn);

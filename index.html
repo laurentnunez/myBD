@@ -116,7 +116,13 @@
 
       <div class="form-grid">
         
-        <button id="scanButton" class="btn primary">📷 Scanner</button>
+        <div class="isbn-row">
+          <input id="isbnInput" placeholder="ISBN (10 ou 13 chiffres)" />
+          <button id="isbnFetchButton" class="btn primary">
+            Récupérer via ISBN
+          </button>
+        </div>
+
         <input id="seriesInput" placeholder="Série" />
         <div class="titleTome">
           <input id="tomeInput" class="tomeInput" type="number" placeholder="N°" min="1" />
@@ -224,17 +230,6 @@
     </div>
   </div>
 
-  <!-- Modale de scan -->
-  <div id="scanModal" class="modal hidden">
-    <div class="modal-content" style="max-width:400px">
-      <h2>Scanner un code-barres</h2>
-      <video id="scanVideo" autoplay playsinline style="width:100%; border-radius:10px;"></video>
-
-      <div class="modal-actions">
-        <button id="scanClose" class="btn">Fermer</button>
-      </div>
-    </div>
-  </div>
-
+  
 </body>
 </html>

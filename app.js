@@ -124,11 +124,10 @@ function openDetailModal(bd) {
       detailTomeValue.textContent = "Tome " + bd.tome;
   }
 
-
-  byId("detailAuthor").textContent = bd.author ?? "";
-  byId("detailArtist").textContent = bd.artist ?? "";
-  byId("detailEditor").textContent = bd.editor ?? "";
-  byId("detailDate").textContent = bd.date ?? "";
+  setDetailField("detailAuthor", bd.author);
+  setDetailField("detailArtist", bd.artist);
+  setDetailField("detailEditor", bd.editor);
+  setDetailField("detailDate", bd.date);
   byId("detailCover").src = bd.cover ?? "";
 
   detail.classList.remove("hidden", "hide");
@@ -137,6 +136,21 @@ function openDetailModal(bd) {
   byId("addButton").classList.add("hidden");
   detail.dataset.bdId = bd.id;
 }
+
+function setDetailField(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  const row = el.closest(".meta-row");
+  const hasValue = value && String(value).trim() !== "";
+
+  el.textContent = hasValue ? value : "";
+
+  if (row) {
+    row.classList.toggle("hidden", !hasValue);
+  }
+}
+
 
 function closeDetailModal() {
   const detail = byId("detailModal");

@@ -735,53 +735,80 @@ function formatTomeLabel(tome) {
   }
 
 
+function openModal() {
+  const modalEl = document.getElementById("modal");
+  const addButton = document.getElementById("addButton");
+
+  modalEl.classList.remove("hidden", "hide");
+  modalEl.classList.add("show");
+  document.body.classList.add("modal-open");
+  addButton.classList.add("hidden");
+}
+
 
 async function handleCodeFound(isbn) {
-    showToast("Code détecté : " + isbn);
+  showToast("Code détecté : " + isbn);
 
-    try {
-        // ✅ 1) Appel OpenLibrary (gratuit, fiable pour BD FR)
-        const res = await fetch(`https://openlibrary.org/isbn/${isbn}.json`);
+  try {
+    let data = null;
 
-        if (!res.ok) {
-            showToast("Aucune donnée trouvée pour cet ISBN", "error");
-            return;
-        }
-
-        const data = await res.json();
-
-        // ✅ Ouvrir la modale avant de remplir
-        openModal();
-
-        // ✅ Remplissage des champs avec fallback
-        byId("seriesInput").value = data.subtitle || data.title || "";
-        byId("titleInput").value = data.title || "";
-
-        if (data.authors && Array.isArray(data.authors)) {
-            const authors = await Promise.all(
-                data.authors.map(a =>
-                    fetch(`https://openlibrary.org${a.key}.json`).then(r => r.json())
-                )
-            );
-            byId("authorInput").value = authors.map(a => a.name).join(", ");
-        } else {
-            byId("authorInput").value = "";
-        }
-
-        byId("editorInput").value = data.publishers?.[0] || "";
-        byId("dateInput").value = data.publish_date || "";
-        byId("pagesInput").value = data.number_of_pages || "";
-
-        // ✅ Couverture via OpenLibrary Cover API
-        importedCoverDataURL =
-            `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
-
-        showToast("Données pré-remplies !");
+    // 1️⃣ Tentative directe via /isbn/
+    const isbnRes = await fetch(`https://openlibrary.org/isbn/${isbn}.json`);
+    if (isbnRes.ok) {
+      data = await isbnRes.json();
     }
-    catch (e) {
-        console.error("Erreur OpenLibrary :", e);
-        showToast("Impossible de récupérer les infos pour cet ISBN", "error");
+
+    // 2️⃣ Fallback via search.json
+    if (!data) {
+      const searchRes = await fetch(
+        `https://openlibrary.org/search.json?isbn=${isbn}`
+      );
+      const searchData = await searchRes.json();
+
+      if (!searchData.docs || searchData.docs.length === 0) {
+        showToast("Aucune donnée trouvée pour cet ISBN", "error");
+        return;
+      }
+
+      data = searchData.docs[0];
     }
+
+    // ✅ Ouvrir la modale
+    openModal();
+
+    // ✅ Pré-remplissage
+    byId("seriesInput").value =
+      data.subtitle ||
+      (Array.isArray(data.series) ? data.series[0] : "") ||
+      "";
+
+    byId("titleInput").value = data.title || "";
+
+    byId("authorInput").value =
+      (data.author_name || []).join(", ");
+
+    byId("editorInput").value =
+      (data.publisher || [])[0] || "";
+
+    byId("dateInput").value =
+      data.publish_date ||
+      data.first_publish_year ||
+      "";
+
+    byId("pagesInput").value =
+      data.number_of_pages ||
+      data.number_of_pages_median ||
+      "";
+
+    // ✅ Couverture
+    importedCoverDataURL =
+      `https://covers.openlibrary.org/b/isbn/${isbn}-L.jpg`;
+
+    showToast("Données pré-remplies !");
+  } catch (e) {
+    console.error("Erreur OpenLibrary :", e);
+    showToast("Impossible de récupérer les infos pour cet ISBN", "error");
+  }
 }
 
 
